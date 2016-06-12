@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/aFreeGraphics/aFreeGraphics.iml" filepath="$PROJECT_DIR$/aFreeGraphics/aFreeGraphics.iml" />
-      <module fileurl="file://$PROJECT_DIR$/afreechart/afreechart.iml" filepath="$PROJECT_DIR$/afreechart/afreechart.iml" />
-      <module fileurl="file://$PROJECT_DIR$/afreechart-android_studio.iml" filepath="$PROJECT_DIR$/afreechart-android_studio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/afreechart.iml" filepath="$PROJECT_DIR$/afreechart.iml" />
+      <module fileurl="file://$PROJECT_DIR$/afreechart/afreechart-afreechart.iml" filepath="$PROJECT_DIR$/afreechart/afreechart-afreechart.iml" />
     </modules>
   </component>
 </project>
