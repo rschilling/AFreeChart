@@ -104,8 +104,6 @@
             </intent-filter>
         </activity>
     </application>
-    
-    <uses-sdk android:minSdkVersion="7" />
 
     <!--
     <instrumentation android:targetPackage="org.afree.chart" android:name="android.test.InstrumentationTestRunner" />
