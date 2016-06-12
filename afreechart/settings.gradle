@@ -1,2 +1,3 @@
 include ':aFreeGraphics'
-include ':afreechart'
+include ':aFreeChartLib'
+include ':sampleApp'
