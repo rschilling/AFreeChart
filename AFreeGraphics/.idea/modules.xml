@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AFreeGraphics-android_studio.iml" filepath="$PROJECT_DIR$/AFreeGraphics-android_studio.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AFreeGraphics.iml" filepath="$PROJECT_DIR$/AFreeGraphics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/afreegraphicslib/app.iml" filepath="$PROJECT_DIR$/afreegraphicslib/app.iml" />
     </modules>
   </component>
 </project>
