@@ -131,10 +131,7 @@ public final class ObjectUtilities {
         if (object == null) {
             throw new IllegalArgumentException("Null 'object' argument.");
         }
-        if (object instanceof PublicCloneable) {
-            final PublicCloneable pc = (PublicCloneable) object;
-            return pc.clone();
-        }
+
         else {
             try {
                 final Method method = object.getClass().getMethod("clone",

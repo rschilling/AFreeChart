@@ -112,7 +112,9 @@
 package org.afree.chart.renderer.category;
 
 import java.io.Serializable;
+import java.util.List;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.ui.LengthAdjustmentType;
 import org.afree.ui.RectangleAnchor;
 import org.afree.ui.RectangleEdge;
@@ -122,7 +124,6 @@ import org.afree.chart.axis.ValueAxis;
 import org.afree.chart.Effect3D;
 import org.afree.data.category.CategoryDataset;
 import org.afree.data.Range;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.event.RendererChangeEvent;
 import org.afree.chart.labels.CategoryItemLabelGenerator;
 import org.afree.chart.labels.ItemLabelAnchor;
@@ -811,7 +812,7 @@ public class BarRenderer3D extends BarRenderer
         }
 
         // add an item entity, if this information is being collected
-        EntityCollection entities = state.getEntityCollection();
+           List<ChartEntity> entities = state.getEntityCollection();
         if (entities != null) {
             PathShape barOutline = new PathShape();
             barOutline.moveTo((float) x0, (float) y3);

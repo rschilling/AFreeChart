@@ -84,10 +84,11 @@
 package org.afree.chart.renderer.xy;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.afree.chart.LegendItem;
 import org.afree.chart.axis.ValueAxis;
-import org.afree.chart.entity.EntityCollection;
+import org.afree.chart.entity.ChartEntity;
 import org.afree.chart.event.RendererChangeEvent;
 import org.afree.chart.plot.CrosshairState;
 import org.afree.chart.plot.PlotOrientation;
@@ -324,7 +325,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @param visible
      *            the flag.
      * 
-     * @see #getLinesVisible()
+     * @see {@code getLinesVisible()}
      * 
      * @deprecated As of JFreeChart 1.0.7, use the per-series and base level settings.
      */
@@ -483,7 +484,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @param visible
      *            the flag.
      * 
-     * @see #getShapesVisible()
+     * @see {@code getShapesVisible()}
      * 
      * @deprecated As of JFreeChart 1.0.7, use the per-series and base level settings.
      */
@@ -926,9 +927,9 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
         else if (isItemPass(pass)) {
 
             // setup for collecting optional entity info...
-            EntityCollection entities = null;
+            List<ChartEntity> entities = null;
             if (info != null) {
-                entities = info.getOwner().getEntityCollection();
+                entities = info.getOwner().entities;
             }
 
             drawSecondaryPass(canvas, plot, dataset, pass, series, item, domainAxis, dataArea,
@@ -1153,7 +1154,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     protected void drawSecondaryPass(Canvas canvas, XYPlot plot, XYDataset dataset, int pass,
             int series, int item, ValueAxis domainAxis, RectShape dataArea, ValueAxis rangeAxis,
-            CrosshairState crosshairState, EntityCollection entities) {
+            CrosshairState crosshairState, List<ChartEntity> entities) {
 
         Shape entityArea = null;
 

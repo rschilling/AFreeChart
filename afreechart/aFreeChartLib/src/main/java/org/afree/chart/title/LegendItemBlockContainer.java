@@ -56,25 +56,16 @@
 
 package org.afree.chart.title;
 
-import org.afree.chart.block.Arrangement;
-import org.afree.chart.block.BlockContainer;
-import org.afree.chart.block.BlockResult;
-import org.afree.chart.block.EntityBlockParams;
-import org.afree.chart.block.EntityBlockResult;
+
 import org.afree.data.general.Dataset;
-import org.afree.chart.entity.EntityCollection;
-import org.afree.chart.entity.LegendItemEntity;
-import org.afree.chart.entity.StandardEntityCollection;
-import org.afree.graphics.geom.RectShape;
-import org.afree.graphics.geom.Shape;
-import android.graphics.Canvas;
+
 
 /**
  * A container that holds all the pieces of a single legend item.
  * 
  * @since JFreeChart 1.0.2
  */
-public class LegendItemBlockContainer extends BlockContainer {
+public class LegendItemBlockContainer {
 
     /**
      * 
@@ -106,9 +97,7 @@ public class LegendItemBlockContainer extends BlockContainer {
 
     /**
      * Creates a new legend item block.
-     * 
-     * @param arrangement
-     *            the arrangement.
+     *
      * @param dataset
      *            the dataset.
      * @param seriesKey
@@ -116,9 +105,8 @@ public class LegendItemBlockContainer extends BlockContainer {
      * 
      * @since JFreeChart 1.0.6
      */
-    public LegendItemBlockContainer(Arrangement arrangement, Dataset dataset,
+    public LegendItemBlockContainer(Dataset dataset,
             Comparable seriesKey) {
-        super(arrangement);
         this.dataset = dataset;
         this.seriesKey = seriesKey;
     }
@@ -200,39 +188,5 @@ public class LegendItemBlockContainer extends BlockContainer {
         this.urlText = text;
     }
 
-    /**
-     * Draws the block within the specified area.
-     * 
-     * @param canvas
-     *            the graphics device.
-     * @param area
-     *            the area.
-     * @param params
-     *            passed on to blocks within the container (<code>null</code>
-     *            permitted).
-     * 
-     * @return An instance of {@link EntityBlockResult}, or <code>null</code>.
-     */
-    public Object draw(Canvas canvas, RectShape area, Object params) {
-        // draw the block without collecting entities
-        super.draw(canvas, area, null);
-        EntityBlockParams ebp = null;
-        BlockResult r = new BlockResult();
-        if (params instanceof EntityBlockParams) {
-            ebp = (EntityBlockParams) params;
-            if (ebp.getGenerateEntities()) {
-                EntityCollection ec = new StandardEntityCollection();
-                LegendItemEntity entity = new LegendItemEntity((Shape) area
-                        .clone());
-                entity.setSeriesIndex(this.series);
-                entity.setSeriesKey(this.seriesKey);
-                entity.setDataset(this.dataset);
-                entity.setToolTipText(getToolTipText());
-                entity.setURLText(getURLText());
-                ec.add(entity);
-                r.setEntityCollection(ec);
-            }
-        }
-        return r;
-    }
+
 }

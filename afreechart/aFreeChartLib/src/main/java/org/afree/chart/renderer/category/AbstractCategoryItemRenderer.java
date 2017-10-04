@@ -126,6 +126,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.ui.LengthAdjustmentType;
 import org.afree.util.ObjectList;
 import org.afree.ui.RectangleAnchor;
@@ -139,7 +140,6 @@ import org.afree.data.category.CategoryDataset;
 import org.afree.data.Range;
 import org.afree.data.general.DatasetUtilities;
 import org.afree.chart.entity.CategoryItemEntity;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.event.RendererChangeEvent;
 import org.afree.chart.labels.CategoryItemLabelGenerator;
 import org.afree.chart.labels.CategorySeriesLabelGenerator;
@@ -1378,7 +1378,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @param hotspot
      *            the hotspot (<code>null</code> not permitted).
      */
-    protected void addItemEntity(EntityCollection entities,
+    protected void addItemEntity(List<ChartEntity> entities,
             CategoryDataset dataset, int row, int column, Shape hotspot) {
         if (hotspot == null) {
             throw new IllegalArgumentException("Null 'hotspot' argument.");
@@ -1414,7 +1414,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * 
      * @since JFreeChart 1.0.13
      */
-    protected void addEntity(EntityCollection entities, Shape hotspot,
+    protected void addEntity(List<CategoryItemEntity> entities, Shape hotspot,
             CategoryDataset dataset, int row, int column, double entityX,
             double entityY) {
         if (!getItemCreateEntity(row, column)) {

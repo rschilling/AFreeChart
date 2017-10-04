@@ -63,8 +63,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.afree.util.ObjectUtilities;
-import org.afree.util.PublicCloneable;
-import org.afree.data.xy.IntervalXYDataset;
 
 
 /**
@@ -75,7 +73,7 @@ import org.afree.data.xy.IntervalXYDataset;
  * @see XYIntervalSeries
  */
 public class XYIntervalSeriesCollection extends AbstractIntervalXYDataset
-        implements IntervalXYDataset, PublicCloneable, Serializable {
+        implements IntervalXYDataset, Serializable {
 
     /**
      * 
@@ -92,7 +90,7 @@ public class XYIntervalSeriesCollection extends AbstractIntervalXYDataset
     }
 
     /**
-     * Adds a series to the collection and sends a {@link DatasetChangeEvent}
+     * Adds a series to the collection and sends a {@code DatasetChangeEvent}
      * to all registered listeners.
      *
      * @param series  the series (<code>null</code> not permitted).

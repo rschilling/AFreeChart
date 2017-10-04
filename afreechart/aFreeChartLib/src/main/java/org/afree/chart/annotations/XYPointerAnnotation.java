@@ -79,7 +79,6 @@ import android.graphics.Paint;
 import android.graphics.PathEffect;
 
 import org.afree.util.ObjectUtilities;
-import org.afree.util.PublicCloneable;
 import org.afree.ui.RectangleEdge;
 import org.afree.io.SerialUtilities;
 import org.afree.chart.axis.ValueAxis;
@@ -110,7 +109,7 @@ import org.afree.graphics.SolidColor;
  *
  */
 public class XYPointerAnnotation extends XYTextAnnotation
-        implements Cloneable, PublicCloneable, Serializable {
+        implements Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -4031161445009858551L;
@@ -173,7 +172,7 @@ public class XYPointerAnnotation extends XYTextAnnotation
      */
     public XYPointerAnnotation(Context ctx, String label, double x, double y, double angle) {
 
-        super(ctx, label, x, y);
+        super(ctx);
         this.angle = angle;
         this.tipRadius = DEFAULT_TIP_RADIUS;
         this.baseRadius = DEFAULT_BASE_RADIUS;
@@ -416,8 +415,8 @@ public class XYPointerAnnotation extends XYTextAnnotation
                 plot.getDomainAxisLocation(), orientation);
         RectangleEdge rangeEdge = Plot.resolveRangeAxisLocation(
                 plot.getRangeAxisLocation(), orientation);
-        double j2DX = domainAxis.valueToJava2D(getX(), dataArea, domainEdge);
-        double j2DY = rangeAxis.valueToJava2D(getY(), dataArea, rangeEdge);
+        double j2DX = domainAxis.valueToJava2D(0, dataArea, domainEdge);
+        double j2DY = rangeAxis.valueToJava2D(0, dataArea, rangeEdge);
         if (orientation == PlotOrientation.HORIZONTAL) {
             double temp = j2DX;
             j2DX = j2DY;
@@ -468,25 +467,28 @@ public class XYPointerAnnotation extends XYTextAnnotation
                 + this.labelOffset);
         double labelY = j2DY + Math.sin(this.angle) * (this.baseRadius
                 + this.labelOffset);
+
+        // TODO: implement
+        /*
 //        canvas.setFont(getFont());
-        
+
 //        Shape hotspot = TextUtilities.calculateRotatedStringBounds(
 //                getText(), canvas, (float) labelX, (float) labelY, getTextAnchor(),
 //                getRotationAngle(), getRotationAnchor());
-        
+
 //        hotspot = TextUtilities.drawRotatedString(
 //                getText(), canvas, (float) labelX, (float) labelY, getTextAnchor(),
-//                getRotationAngle(), getRotationAnchor(),paint);        
-        
+//                getRotationAngle(), getRotationAnchor(),paint);
+
         if (getBackgroundPaintType() != null) {
 //            canvas.setPaint(getBackgroundPaint());
 //            canvas.fill(hotspot);
             PaintUtility.updatePaint(paint, getBackgroundPaintType());
             canvas.drawPaint(paint);
         }
-        
+
 //        canvas.setPaint(getPaint());
-        
+
         PaintUtility.updatePaint(paint, getPaintType());
 //        TextUtilities.drawRotatedString(getText(), canvas, (float) labelX,
 //                (float) labelY, getTextAnchor(), getRotationAngle(),
@@ -509,6 +511,7 @@ public class XYPointerAnnotation extends XYTextAnnotation
         if (toolTip != null || url != null) {
             addEntity(info, hotspot, rendererIndex, toolTip, url);
         }
+        */
 
     }
 

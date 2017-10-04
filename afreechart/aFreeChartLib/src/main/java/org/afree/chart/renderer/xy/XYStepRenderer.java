@@ -85,16 +85,16 @@
 package org.afree.chart.renderer.xy;
 
 import java.io.Serializable;
+import java.util.List;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import org.afree.util.PublicCloneable;
+import org.afree.chart.entity.ChartEntity;
 import org.afree.ui.RectangleEdge;
 import org.afree.chart.axis.ValueAxis;
 import org.afree.chart.HashUtilities;
 import org.afree.data.xy.XYDataset;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.labels.XYToolTipGenerator;
 import org.afree.chart.plot.CrosshairState;
 import org.afree.chart.plot.PlotOrientation;
@@ -116,7 +116,7 @@ import org.afree.graphics.PaintUtility;
  * alt="XYStepRendererSample.png" />
  */
 public class XYStepRenderer extends XYLineAndShapeRenderer
-        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
+        implements XYItemRenderer, Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -8918141928884796108L;
@@ -170,7 +170,7 @@ public class XYStepRenderer extends XYLineAndShapeRenderer
     }
 
     /**
-     * Sets the step point and sends a {@link RendererChangeEvent} to all
+     * Sets the step point and sends a {@code RendererChangeEvent} to all
      * registered listeners.
      *
      * @param stepPoint  the step point (in the range 0.0 to 1.0)
@@ -297,7 +297,7 @@ public class XYStepRenderer extends XYLineAndShapeRenderer
                     rangeAxisIndex, transX1, transY1, orientation);
 
             // collect entity and tool tip information...
-            EntityCollection entities = state.getEntityCollection();
+            List<ChartEntity> entities = state.getEntityCollection();
             if (entities != null) {
                 addEntity(entities, null, dataset, series, item, transX1,
                         transY1);

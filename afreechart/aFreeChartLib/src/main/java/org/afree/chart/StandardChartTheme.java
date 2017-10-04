@@ -66,17 +66,14 @@ import android.graphics.Color;
 import android.graphics.PathEffect;
 import android.graphics.Typeface;
 
+import org.afree.graphics.SolidColor;
 import org.afree.util.PaintTypeUtilities;
-import org.afree.util.PublicCloneable;
 import org.afree.ui.RectangleInsets;
 import org.afree.io.SerialUtilities;
 import org.afree.chart.annotations.XYAnnotation;
 import org.afree.chart.axis.CategoryAxis;
 import org.afree.chart.axis.SymbolAxis;
 import org.afree.chart.axis.ValueAxis;
-import org.afree.chart.block.Block;
-import org.afree.chart.block.BlockContainer;
-import org.afree.chart.block.LabelBlock;
 import org.afree.chart.plot.CategoryPlot;
 import org.afree.chart.plot.CombinedDomainCategoryPlot;
 import org.afree.chart.plot.CombinedDomainXYPlot;
@@ -98,12 +95,9 @@ import org.afree.chart.renderer.xy.GradientXYBarPainter;
 import org.afree.chart.renderer.xy.XYBarPainter;
 import org.afree.chart.renderer.xy.XYBarRenderer;
 import org.afree.chart.renderer.xy.XYItemRenderer;
-import org.afree.chart.title.LegendTitle;
-import org.afree.chart.title.TextTitle;
 import org.afree.chart.title.Title;
 import org.afree.graphics.geom.Font;
 import org.afree.graphics.PaintType;
-import org.afree.graphics.SolidColor;
 
 
 
@@ -116,7 +110,7 @@ import org.afree.graphics.SolidColor;
  * @since JFreeChart 1.0.11
  */
 public class StandardChartTheme implements ChartTheme, Cloneable,
-        PublicCloneable, Serializable {
+       Serializable {
 
     /**
      * 
@@ -228,7 +222,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      */
     private transient PaintType wallPaintType;
 
-    /** The error indicator paint for the {@link StatisticalBarRenderer}. */
+    /** The error indicator paint for the {@code StatisticalBarRenderer}. */
     private transient PaintType errorIndicatorPaintType;
 
     /** The grid band paint for a {@link SymbolAxis}. */
@@ -1113,17 +1107,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      * @return A clone of the drawing supplier.
      */
     public DrawingSupplier getDrawingSupplier() {
-        DrawingSupplier result = null;
-        if (this.drawingSupplierType instanceof PublicCloneable) {
-            PublicCloneable pc = (PublicCloneable) this.drawingSupplierType;
-              try {
-                result = (DrawingSupplier) pc.clone();
-            }
-            catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
-        }
-        return result;
+        return drawingSupplierType;
     }
 
     /**
@@ -1146,9 +1130,11 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      * @param chart  the chart (<code>null</code> not permitted).
      */
     public void apply(AFreeChart chart) {
+
         if (chart == null) {
             throw new IllegalArgumentException("Null 'chart' argument.");
         }
+        /*
         TextTitle title = chart.getTitle();
         if (title != null) {
             title.setFont(this.extraLargeFont);
@@ -1167,6 +1153,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
         if (plot != null) {
             applyToPlot(plot);
         }
+        */
     }
 
     /**
@@ -1175,6 +1162,8 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      * @param title  the title.
      */
     protected void applyToTitle(Title title) {
+
+        /*
         if (title instanceof TextTitle) {
             TextTitle tt = (TextTitle) title;
             tt.setFont(this.largeFont);
@@ -1211,35 +1200,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
 //                }
 //            }
 //        }
-    }
-
-    /**
-     * Applies the attributes of this theme to the specified container.
-     *
-     * @param bc  a block container (<code>null</code> not permitted).
-     */
-    protected void applyToBlockContainer(BlockContainer bc) {
-        Iterator iterator = bc.getBlocks().iterator();
-        while (iterator.hasNext()) {
-            Block b = (Block) iterator.next();
-            applyToBlock(b);
-        }
-    }
-
-    /**
-     * Applies the attributes of this theme to the specified block.
-     *
-     * @param b  the block.
-     */
-    protected void applyToBlock(Block b) {
-        if (b instanceof Title) {
-            applyToTitle((Title) b);
-        }
-        else if (b instanceof LabelBlock) {
-            LabelBlock lb = (LabelBlock) b;
-            lb.setFont(this.regularFont);
-            lb.setPaintType(this.legendItemPaintType);
-        }
+*/
     }
 
     /**

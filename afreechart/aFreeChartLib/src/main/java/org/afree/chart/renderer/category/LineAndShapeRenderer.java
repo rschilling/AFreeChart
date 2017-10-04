@@ -108,6 +108,7 @@
 
 package org.afree.chart.renderer.category;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.util.BooleanList;
 import org.afree.util.BooleanUtilities;
 import org.afree.util.ShapeUtilities;
@@ -115,13 +116,9 @@ import org.afree.chart.LegendItem;
 import org.afree.chart.axis.CategoryAxis;
 import org.afree.chart.axis.ValueAxis;
 import org.afree.data.category.CategoryDataset;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.event.RendererChangeEvent;
-import org.afree.chart.event.RendererChangeListener;
 import org.afree.chart.plot.CategoryPlot;
 import org.afree.chart.plot.PlotOrientation;
-import org.afree.chart.renderer.category.BarRenderer;
-import org.afree.chart.renderer.category.CategoryItemRendererState;
 import org.afree.graphics.geom.LineShape;
 import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.geom.Shape;
@@ -129,6 +126,8 @@ import org.afree.graphics.PaintType;
 import org.afree.graphics.PaintUtility;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+
+import java.util.List;
 
 /**
  * A renderer that draws shapes for each data item, and lines between data items
@@ -292,7 +291,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @param visible
      *            the flag (<code>null</code> permitted).
      * 
-     * @see #getLinesVisible()
+     * @see {@code getLinesVisible()}
      * 
      * @deprecated As of JFreeChart 1.0.7 (the override facility is unnecessary, just use
      *             the per-series and base (default) settings).
@@ -310,7 +309,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @param visible
      *            the flag.
      * 
-     * @see #getLinesVisible()
+     * @see {@code getLinesVisible()}
      * 
      * @deprecated As of JFreeChart 1.0.7 (the override facility is unnecessary, just use
      *             the per-series and base (default) settings).
@@ -422,7 +421,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @param visible
      *            the flag (<code>null</code> permitted).
      * 
-     * @see #getShapesVisible()
+     * @see {@code getShapesVisible()}
      * 
      * @deprecated As of JFreeChart 1.0.7 (the override facility is unnecessary, just use
      *             the per-series and base (default) settings).
@@ -439,7 +438,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      * @param visible
      *            the flag.
      * 
-     * @see #getShapesVisible()
+     * @see {@code getShapesVisible()}
      * 
      * @deprecated As of JFreeChart 1.0.7 (the override facility is unnecessary, just use
      *             the per-series and base (default) settings).
@@ -1050,7 +1049,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
                     datasetIndex, x1, y1, orientation);
 
             // add an item entity, if this information is being collected
-            EntityCollection entities = state.getEntityCollection();
+            List<ChartEntity> entities = state.getEntityCollection();
             if (entities != null) {
                 addItemEntity(entities, dataset, row, column, shape);
             }

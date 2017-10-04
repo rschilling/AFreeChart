@@ -64,7 +64,6 @@ import android.graphics.Canvas;
 import android.graphics.PointF;
 
 import org.afree.util.ObjectUtilities;
-import org.afree.util.PublicCloneable;
 import org.afree.ui.RectangleAnchor;
 import org.afree.ui.RectangleEdge;
 import org.afree.ui.Size2D;
@@ -87,7 +86,7 @@ import org.afree.graphics.geom.RectShape;
  * @since JFreeChart 1.0.11
  */
 public class XYTitleAnnotation extends AbstractXYAnnotation
-        implements Cloneable, PublicCloneable, Serializable {
+        implements Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -4364694501921559958L;

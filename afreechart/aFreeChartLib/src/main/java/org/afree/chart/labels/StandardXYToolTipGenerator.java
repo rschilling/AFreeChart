@@ -60,7 +60,6 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 
-import org.afree.util.PublicCloneable;
 import org.afree.data.xy.XYDataset;
 
 /**
@@ -68,7 +67,7 @@ import org.afree.data.xy.XYDataset;
  * {@link org.afree.chart.renderer.xy.XYItemRenderer}.
  */
 public class StandardXYToolTipGenerator extends AbstractXYItemLabelGenerator
-        implements XYToolTipGenerator, Cloneable, PublicCloneable,
+        implements XYToolTipGenerator, Cloneable,
                    Serializable {
 
     /** For serialization. */

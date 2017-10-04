@@ -135,6 +135,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.ui.Layer;
 import org.afree.ui.LengthAdjustmentType;
 import org.afree.util.ObjectList;
@@ -148,7 +149,6 @@ import org.afree.chart.axis.ValueAxis;
 import org.afree.data.Range;
 import org.afree.data.xy.XYDataset;
 import org.afree.data.general.DatasetUtilities;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.entity.XYItemEntity;
 import org.afree.chart.event.RendererChangeEvent;
 import org.afree.chart.labels.CategorySeriesLabelGenerator;
@@ -1458,8 +1458,8 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
      *            the entity's center y-coordinate in user space (only used if
      *            <code>area</code> is <code>null</code>).
      */
-    protected void addEntity(EntityCollection entities, Shape area, XYDataset dataset, int series,
-            int item, double entityX, double entityY) {
+    protected void addEntity(List<ChartEntity> entities, Shape area, XYDataset dataset, int series,
+                             int item, double entityX, double entityY) {
         if (!getItemCreateEntity(series, item)) {
             return;
         }
@@ -1504,7 +1504,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
      * 
      * @return The URL generator (possibly <code>null</code>).
      * 
-     * @see #setLegendItemURLGenerator(CategorySeriesLabelGenerator)
+     * @see {@code setLegendItemURLGenerator(CategorySeriesLabelGenerator)}
      */
     public XYSeriesLabelGenerator getLegendItemURLGenerator() {
         return this.legendItemURLGenerator;

@@ -79,29 +79,10 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.afree.chart.plot.Plot;
-import org.afree.ui.RectangleAnchor;
-import org.afree.ui.RectangleEdge;
-import org.afree.ui.RectangleInsets;
-import org.afree.ui.Size2D;
-import org.afree.chart.LegendItem;
-import org.afree.chart.LegendItemCollection;
 import org.afree.chart.LegendItemSource;
-import org.afree.chart.entity.EntityCollection;
-import org.afree.chart.entity.StandardEntityCollection;
-import org.afree.chart.entity.TitleEntity;
 import org.afree.chart.event.TitleChangeEvent;
-import org.afree.graphics.geom.Font;
-import org.afree.graphics.geom.RectShape;
-import org.afree.graphics.PaintType;
-import org.afree.graphics.PaintUtility;
-import org.afree.graphics.SolidColor;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.view.View;
 
 
 /**

@@ -70,7 +70,6 @@ import java.util.Locale;
 
 
 import org.afree.util.ObjectList;
-import org.afree.util.PublicCloneable;
 import org.afree.data.general.PieDataset;
 import org.afree.graphics.geom.Font;
 
@@ -87,7 +86,7 @@ import org.afree.graphics.geom.Font;
  */
 public class StandardPieSectionLabelGenerator
         extends AbstractPieItemLabelGenerator
-        implements PieSectionLabelGenerator, Cloneable, PublicCloneable,
+        implements PieSectionLabelGenerator, Cloneable,
                    Serializable {
 
     /** For serialization. */

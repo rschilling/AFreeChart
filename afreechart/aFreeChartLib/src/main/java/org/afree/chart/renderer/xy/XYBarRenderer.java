@@ -119,7 +119,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.List;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.ui.GradientShaderFactory;
 import org.afree.ui.RectangleEdge;
 import org.afree.ui.StandardGradientShaderFactory;
@@ -129,7 +131,6 @@ import org.afree.data.xy.IntervalXYDataset;
 import org.afree.data.Range;
 import org.afree.data.xy.XYDataset;
 import org.afree.data.general.DatasetUtilities;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.event.RendererChangeEvent;
 import org.afree.chart.labels.ItemLabelAnchor;
 import org.afree.chart.labels.ItemLabelPosition;
@@ -485,7 +486,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      *
      * @return A transformer (<code>null</code> possible).
      *
-     * @see #setGradientShaderFactory(GradientPaintTransformer)
+     * @see {@code setGradientShaderFactory(GradientPaintTransformer)}
      */
     public GradientShaderFactory getGradientShaderFactory() {
         return this.gradientShaderFactory;
@@ -976,7 +977,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
         updateCrosshairValues(crosshairState, x1, y1, domainAxisIndex,
                 rangeAxisIndex, transX1, transY1, plot.getOrientation());
 
-        EntityCollection entities = state.getEntityCollection();
+        List<ChartEntity> entities = state.getEntityCollection();
         if (entities != null) {
             addEntity(entities, bar, dataset, series, item, 0.0, 0.0);
         }
@@ -985,7 +986,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
 
     /**
      * Draws an item label.  This method is provided as an alternative to
-     * {@link #drawItemLabel(Graphics2D, PlotOrientation, XYDataset, int, int,
+     * {@link {@code drawItemLabel(Graphics2D, PlotOrientation, XYDataset, int, int,
      * double, double, boolean)} so that the bar can be used to calculate the
      * label anchor point.
      *

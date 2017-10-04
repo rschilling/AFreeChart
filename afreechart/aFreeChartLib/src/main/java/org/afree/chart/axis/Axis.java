@@ -107,11 +107,11 @@ import java.util.EventListener;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.ui.RectangleEdge;
 import org.afree.ui.RectangleInsets;
 import org.afree.ui.TextAnchor;
 import org.afree.chart.entity.AxisEntity;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.event.AxisChangeEvent;
 import org.afree.chart.event.AxisChangeListener;
 import org.afree.chart.plot.Plot;
@@ -1200,7 +1200,7 @@ public abstract class Axis implements Cloneable, Serializable {
                     .getCursor()
                     - cursor, dataArea.getHeight());
         }
-        EntityCollection e = plotState.getOwner().getEntityCollection();
+        List<ChartEntity> e = plotState.getOwner().entities;
         if (e != null) {
             e.add(new AxisEntity(hotspot, this));
         }

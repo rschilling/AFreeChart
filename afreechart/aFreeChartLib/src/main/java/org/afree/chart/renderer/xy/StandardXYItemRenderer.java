@@ -124,7 +124,9 @@
 package org.afree.chart.renderer.xy;
 
 import java.io.Serializable;
+import java.util.List;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.util.BooleanList;
 import org.afree.ui.RectangleEdge;
 import org.afree.util.ShapeUtilities;
@@ -132,7 +134,6 @@ import org.afree.util.UnitType;
 import org.afree.chart.LegendItem;
 import org.afree.chart.axis.ValueAxis;
 import org.afree.data.xy.XYDataset;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.event.RendererChangeEvent;
 import org.afree.chart.labels.XYToolTipGenerator;
 import org.afree.chart.plot.CrosshairState;
@@ -796,7 +797,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
 
         // setup for collecting optional entity info...
         Shape entityArea = null;
-        EntityCollection entities = null;
+        List<ChartEntity> entities = null;
         if (info != null) {
             entities = info.getOwner().getEntityCollection();
         }

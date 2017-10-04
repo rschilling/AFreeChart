@@ -193,12 +193,12 @@ import org.afree.chart.LegendItem;
 import org.afree.chart.LegendItemCollection;
 import org.afree.chart.PaintTypeMap;
 import org.afree.chart.StrokeMap;
+import org.afree.chart.entity.ChartEntity;
 import org.afree.data.DefaultKeyedValues;
 import org.afree.data.KeyedValues;
 import org.afree.data.general.PieDataset;
 import org.afree.data.general.DatasetChangeEvent;
 import org.afree.data.general.DatasetUtilities;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.entity.PieSectionEntity;
 import org.afree.chart.event.PlotChangeEvent;
 import org.afree.chart.labels.PieSectionLabelGenerator;
@@ -2703,7 +2703,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
                 // update the linking line target for later
                 // add an entity for the pie section
                 if (state.getInfo() != null) {
-                    EntityCollection entities = state.getEntityCollection();
+                    List<ChartEntity> entities = state.getEntityCollection();
                     if (entities != null) {
                         String tip = null;
 

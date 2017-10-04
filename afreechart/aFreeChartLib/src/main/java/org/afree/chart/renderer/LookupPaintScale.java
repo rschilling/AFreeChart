@@ -68,7 +68,6 @@ import java.util.List;
 import android.graphics.Color;
 
 import org.afree.util.PaintTypeUtilities;
-import org.afree.util.PublicCloneable;
 import org.afree.io.SerialUtilities;
 import org.afree.graphics.PaintType;
 import org.afree.graphics.SolidColor;
@@ -80,7 +79,7 @@ import org.afree.graphics.SolidColor;
  * @since JFreeChart 1.0.4
  */
 public class LookupPaintScale
-        implements PaintScale, PublicCloneable, Serializable {
+        implements PaintScale, Serializable {
 
     /**
      * Stores the paint for a value.

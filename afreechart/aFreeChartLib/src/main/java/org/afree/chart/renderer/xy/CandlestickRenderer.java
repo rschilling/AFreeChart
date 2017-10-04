@@ -106,7 +106,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.List;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.ui.RectangleEdge;
 import org.afree.io.SerialUtilities;
 import org.afree.chart.axis.ValueAxis;
@@ -114,7 +116,6 @@ import org.afree.data.xy.IntervalXYDataset;
 import org.afree.data.xy.OHLCDataset;
 import org.afree.data.Range;
 import org.afree.data.xy.XYDataset;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.event.RendererChangeEvent;
 import org.afree.chart.plot.CrosshairState;
 import org.afree.chart.plot.PlotOrientation;
@@ -693,9 +694,9 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
         }
 
         // setup for collecting optional entity info...
-        EntityCollection entities = null;
+        List<ChartEntity> entities = null;
         if (info != null) {
-            entities = info.getOwner().getEntityCollection();
+            entities = info.getOwner().entities;
         }
 
         OHLCDataset highLowData = (OHLCDataset) dataset;

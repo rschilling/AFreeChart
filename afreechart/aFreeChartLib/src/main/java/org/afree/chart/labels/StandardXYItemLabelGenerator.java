@@ -77,8 +77,6 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 
-
-import org.afree.util.PublicCloneable;
 import org.afree.data.xy.XYDataset;
 
 /**
@@ -86,7 +84,7 @@ import org.afree.data.xy.XYDataset;
  * {@link org.afree.data.xy.XYDataset}.
  */
 public class StandardXYItemLabelGenerator extends AbstractXYItemLabelGenerator
-        implements XYItemLabelGenerator, Cloneable, PublicCloneable, 
+        implements XYItemLabelGenerator, Cloneable,
             Serializable {
 
     /** For serialization. */

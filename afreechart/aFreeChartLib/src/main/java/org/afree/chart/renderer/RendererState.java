@@ -57,8 +57,11 @@
 package org.afree.chart.renderer;
 
 import org.afree.chart.ChartRenderingInfo;
-import org.afree.chart.entity.EntityCollection;
+import org.afree.chart.entity.ChartEntity;
 import org.afree.chart.plot.PlotRenderingInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents the current state of a renderer.
@@ -93,12 +96,12 @@ public class RendererState {
      * 
      * @return The entity collection (possibly <code>null</code>).
      */
-    public EntityCollection getEntityCollection() {
-        EntityCollection result = null;
+    public List<ChartEntity> getEntityCollection() {
+        List<ChartEntity> result = null;
         if (this.info != null) {
             ChartRenderingInfo owner = this.info.getOwner();
             if (owner != null) {
-                result = owner.getEntityCollection();
+                result = owner.entities;
             }
         }
         return result;

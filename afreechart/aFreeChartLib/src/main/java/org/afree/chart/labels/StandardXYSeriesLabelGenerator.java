@@ -60,8 +60,6 @@ package org.afree.chart.labels;
 import java.io.Serializable;
 import java.text.MessageFormat;
 
-
-import org.afree.util.PublicCloneable;
 import org.afree.chart.HashUtilities;
 import org.afree.data.xy.XYDataset;
 
@@ -75,7 +73,7 @@ import org.afree.data.xy.XYDataset;
  * this for the sake of backward compatibility.
  */
 public class StandardXYSeriesLabelGenerator implements XYSeriesLabelGenerator,
-        Cloneable,  PublicCloneable,  Serializable {
+        Cloneable,  Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 1916017081848400024L;

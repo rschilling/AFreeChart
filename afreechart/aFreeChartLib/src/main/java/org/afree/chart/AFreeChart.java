@@ -167,23 +167,11 @@
 
 package org.afree.chart;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.afree.ui.Align;
-import org.afree.ui.HorizontalAlignment;
-import org.afree.ui.RectangleEdge;
-import org.afree.ui.RectangleInsets;
-import org.afree.ui.Size2D;
-import org.afree.ui.VerticalAlignment;
-import org.afree.util.ObjectUtilities;
-import org.afree.util.PaintTypeUtilities;
-import org.afree.data.Range;
-import org.afree.chart.entity.EntityCollection;
-import org.afree.chart.entity.AFreeChartEntity;
+
 import org.afree.chart.event.ChartChangeEvent;
 import org.afree.chart.event.ChartChangeListener;
 import org.afree.chart.event.ChartProgressEvent;
@@ -194,30 +182,13 @@ import org.afree.chart.event.TitleChangeEvent;
 import org.afree.chart.event.TitleChangeListener;
 import org.afree.chart.plot.CategoryPlot;
 import org.afree.chart.plot.Plot;
-import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.chart.plot.XYPlot;
 import org.afree.chart.title.LegendTitle;
 import org.afree.chart.title.Title;
-import org.afree.graphics.geom.Font;
-import org.afree.graphics.geom.RectShape;
-import org.afree.graphics.PaintType;
-import org.afree.graphics.PaintUtility;
-import org.afree.graphics.SolidColor;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PathEffect;
-import android.graphics.PointF;
-import android.graphics.Rect;
-import android.graphics.Typeface;
-import android.graphics.Region.Op;
 import android.util.AttributeSet;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 /**
  * A chart class implemented using the Android APIs. The current version

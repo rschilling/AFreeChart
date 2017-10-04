@@ -74,29 +74,9 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
-
-import org.afree.util.PaintTypeUtilities;
-import org.afree.util.PublicCloneable;
-import org.afree.ui.RectangleEdge;
-import org.afree.io.SerialUtilities;
-import org.afree.ui.TextAnchor;
-import org.afree.chart.axis.ValueAxis;
-import org.afree.chart.plot.Plot;
-import org.afree.chart.plot.PlotOrientation;
-import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.chart.plot.XYPlot;
-import org.afree.chart.text.TextUtilities;
-import org.afree.graphics.geom.Font;
-import org.afree.graphics.geom.RectShape;
-import org.afree.graphics.PaintType;
-import org.afree.graphics.PaintUtility;
-import org.afree.graphics.SolidColor;
 
 /**
  * A text annotation that can be placed at a particular (x, y) location on an

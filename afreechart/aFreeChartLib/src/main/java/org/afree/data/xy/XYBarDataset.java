@@ -63,9 +63,6 @@
 
 package org.afree.data.xy;
 
-import org.afree.util.PublicCloneable;
-import org.afree.data.xy.IntervalXYDataset;
-import org.afree.data.xy.XYDataset;
 import  org.afree.data.general.DatasetChangeEvent;
 import  org.afree.data.general.DatasetChangeListener;
 
@@ -75,7 +72,7 @@ import  org.afree.data.general.DatasetChangeListener;
  * {@link IntervalXYDataset} suitable for use in creating XY bar charts.
  */
 public class XYBarDataset extends AbstractIntervalXYDataset
-        implements IntervalXYDataset, DatasetChangeListener, PublicCloneable {
+        implements IntervalXYDataset, DatasetChangeListener, Cloneable{
 
     /**
      * 
@@ -87,6 +84,8 @@ public class XYBarDataset extends AbstractIntervalXYDataset
 
     /** The bar width. */
     private double barWidth;
+
+    private XYBarDataset(){}
 
     /**
      * Creates a new dataset.
@@ -381,7 +380,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      * Returns an independent copy of the dataset.  Note that:
      * <ul>
      * <li>the underlying dataset is only cloned if it implements the
-     * {@link PublicCloneable} interface;</li>
+     * {@code PublicCloneable} interface;</li>
      * <li>the listeners registered with this dataset are not carried over to
      * the cloned dataset.</li>
      * </ul>
@@ -391,12 +390,11 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      * @throws CloneNotSupportedException if the dataset cannot be cloned for
      *         any reason.
      */
+    @Override
     public Object clone() throws CloneNotSupportedException {
-        XYBarDataset clone = (XYBarDataset) super.clone();
-        if (this.underlying instanceof PublicCloneable) {
-            PublicCloneable pc = (PublicCloneable) this.underlying;
-            clone.underlying = (XYDataset) pc.clone();
-        }
+        XYBarDataset clone = new XYBarDataset();
+        clone.barWidth = this.barWidth;
+        clone.underlying = underlying;
         return clone;
     }
 

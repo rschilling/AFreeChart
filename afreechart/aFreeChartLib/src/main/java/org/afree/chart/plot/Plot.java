@@ -153,10 +153,10 @@ import org.afree.chart.AFreeChart;
 import org.afree.chart.LegendItemCollection;
 import org.afree.chart.LegendItemSource;
 import org.afree.chart.axis.AxisLocation;
+import org.afree.chart.entity.ChartEntity;
 import org.afree.data.general.DatasetChangeEvent;
 import org.afree.data.general.DatasetChangeListener;
 import org.afree.data.general.DatasetGroup;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.entity.PlotEntity;
 import org.afree.chart.event.ChartChangeEventType;
 //import org.afree.chart.event.EventListenerList;
@@ -1064,7 +1064,7 @@ public abstract class Plot implements AxisChangeListener, LegendItemSource, Clon
     protected void createAndAddEntity(RectShape dataArea,
             PlotRenderingInfo plotState, String toolTip, String urlText) {
         if (plotState != null && plotState.getOwner() != null) {
-            EntityCollection e = plotState.getOwner().getEntityCollection();
+            List<ChartEntity> e = plotState.getOwner().entities;
             if (e != null) {
                 e.add(new PlotEntity(dataArea, this, toolTip, urlText));
             }

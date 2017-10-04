@@ -71,7 +71,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 
-import org.afree.util.PublicCloneable;
 import org.afree.ui.RectangleEdge;
 import org.afree.util.ShapeUtilities;
 import org.afree.chart.LegendItem;
@@ -98,7 +97,7 @@ import org.afree.graphics.PaintUtility;
  * alt="XYDotRendererSample.png" />
  */
 public class XYDotRenderer extends AbstractXYItemRenderer
-        implements XYItemRenderer, PublicCloneable {
+        implements XYItemRenderer {
 
     /** For serialization. */
     private static final long serialVersionUID = -2764344339073566425L;

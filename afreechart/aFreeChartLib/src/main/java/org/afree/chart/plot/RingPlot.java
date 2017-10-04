@@ -65,9 +65,10 @@
 package org.afree.chart.plot;
 
 import java.io.Serializable;
+import java.util.List;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.data.general.PieDataset;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.entity.PieSectionEntity;
 import org.afree.chart.event.PlotChangeEvent;
 import org.afree.graphics.geom.ArcShape;
@@ -475,7 +476,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
 
                 // add an entity for the pie section
                 if (state.getInfo() != null) {
-                    EntityCollection entities = state.getEntityCollection();
+                    List<ChartEntity> entities = state.getEntityCollection();
                     if (entities != null) {
 //                        String tip = null;
 //                        PieToolTipGenerator toolTipGenerator

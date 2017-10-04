@@ -65,20 +65,20 @@
 package org.afree.chart.renderer.xy;
 
 import java.io.Serializable;
+import java.util.List;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.util.ObjectUtilities;
-import org.afree.util.PublicCloneable;
 import org.afree.ui.RectangleEdge;
 import org.afree.util.ShapeUtilities;
 import org.afree.chart.axis.ValueAxis;
 import org.afree.data.xy.IntervalXYDataset;
 import org.afree.data.Range;
 import org.afree.data.xy.XYDataset;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.labels.ItemLabelPosition;
 import org.afree.chart.labels.XYItemLabelGenerator;
 import org.afree.chart.plot.CrosshairState;
@@ -102,7 +102,7 @@ import org.afree.graphics.PaintUtility;
  * alt="YIntervalRendererSample.png" />
  */
 public class YIntervalRenderer extends AbstractXYItemRenderer
-        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
+        implements XYItemRenderer, Cloneable,Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -2951586537224143260L;
@@ -140,7 +140,7 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
 
     /**
      * Sets the generator for the item labels that appear near the lower
-     * y-value and sends a {@link RendererChangeEvent} to all registered
+     * y-value and sends a {@code RendererChangeEvent} to all registered
      * listeners.  If this is set to <code>null</code>, no item labels will be
      * drawn.
      *
@@ -201,7 +201,7 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
                          int pass) {
 
         // setup for collecting optional entity info...
-        EntityCollection entities = null;
+        List<ChartEntity> entities = null;
         if (info != null) {
             entities = info.getOwner().getEntityCollection();
         }

@@ -62,7 +62,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.afree.util.PublicCloneable;
 import org.afree.data.general.DatasetChangeEvent;
 
 
@@ -78,7 +77,7 @@ import org.afree.data.general.DatasetChangeEvent;
  * @since JFreeChart 1.0.3
  */
 public class DefaultIntervalXYDataset extends AbstractIntervalXYDataset
-        implements PublicCloneable {
+         {
 
     /**
      * 

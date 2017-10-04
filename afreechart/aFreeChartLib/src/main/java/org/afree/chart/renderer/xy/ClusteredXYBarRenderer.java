@@ -80,16 +80,16 @@
 package org.afree.chart.renderer.xy;
 
 import java.io.Serializable;
+import java.util.List;
 
 import android.graphics.Canvas;
 
-import org.afree.util.PublicCloneable;
+import org.afree.chart.entity.ChartEntity;
 import org.afree.ui.RectangleEdge;
 import org.afree.chart.axis.ValueAxis;
 import org.afree.data.xy.IntervalXYDataset;
 import org.afree.data.Range;
 import org.afree.data.xy.XYDataset;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.plot.CrosshairState;
 import org.afree.chart.plot.PlotOrientation;
 import org.afree.chart.plot.PlotRenderingInfo;
@@ -112,7 +112,7 @@ import org.afree.graphics.geom.RectShape;
  * plot.
  */
 public class ClusteredXYBarRenderer extends XYBarRenderer
-        implements Cloneable, PublicCloneable, Serializable {
+        implements Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 5864462149177133147L;
@@ -346,8 +346,8 @@ public class ClusteredXYBarRenderer extends XYBarRenderer
 
             // add an entity for the item...
             if (info != null) {
-                EntityCollection entities
-                        = info.getOwner().getEntityCollection();
+                List<ChartEntity> entities
+                        = info.getOwner().entities;
                 if (entities != null) {
                     addEntity(entities, bar, dataset, series, item,
                             bar.getCenterX(), bar.getCenterY());

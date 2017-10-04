@@ -61,13 +61,13 @@
 package org.afree.chart.renderer.xy;
 
 import java.io.Serializable;
+import java.util.List;
 
-import org.afree.util.PublicCloneable;
 import org.afree.chart.axis.ValueAxis;
+import org.afree.chart.entity.ChartEntity;
 import org.afree.data.Range;
 import org.afree.data.xy.XYDataset;
 import org.afree.data.xy.VectorXYDataset;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.plot.CrosshairState;
 import org.afree.chart.plot.PlotOrientation;
 import org.afree.chart.plot.PlotRenderingInfo;
@@ -91,7 +91,7 @@ import android.graphics.Paint;
  * @since JFreeChart 1.0.6
  */
 public class VectorRenderer extends AbstractXYItemRenderer
-        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
+        implements XYItemRenderer, Cloneable, Serializable {
     /**
      * 
      */
@@ -313,9 +313,9 @@ public class VectorRenderer extends AbstractXYItemRenderer
         p.draw(canvas, paint);
 
         // setup for collecting optional entity info...
-        EntityCollection entities = null;
+        List<ChartEntity> entities = null;
         if (info != null) {
-            entities = info.getOwner().getEntityCollection();
+            entities = info.getOwner().entities;
             if (entities != null) {
                 RectShape rectShape = new RectShape();
                 line.getBounds(rectShape);

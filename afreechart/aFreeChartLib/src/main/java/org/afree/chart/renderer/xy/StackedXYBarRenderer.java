@@ -68,6 +68,7 @@
 
 package org.afree.chart.renderer.xy;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.ui.RectangleEdge;
 import org.afree.ui.TextAnchor;
 import org.afree.chart.axis.ValueAxis;
@@ -76,7 +77,6 @@ import org.afree.data.Range;
 import org.afree.data.xy.XYDataset;
 import org.afree.data.general.DatasetUtilities;
 import org.afree.data.xy.TableXYDataset;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.event.RendererChangeEvent;
 import org.afree.chart.labels.ItemLabelAnchor;
 import org.afree.chart.labels.ItemLabelPosition;
@@ -87,6 +87,8 @@ import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.chart.plot.XYPlot;
 import org.afree.graphics.geom.RectShape;
 import android.graphics.Canvas;
+
+import java.util.List;
 
 /**
  * A bar renderer that displays the series items stacked.
@@ -397,7 +399,7 @@ public class StackedXYBarRenderer extends XYBarRenderer {
 
             // add an entity for the item...
             if (info != null) {
-                EntityCollection entities = info.getOwner()
+                List<ChartEntity> entities = info.getOwner()
                         .getEntityCollection();
                 if (entities != null) {
                     addEntity(entities, bar, dataset, series, item,

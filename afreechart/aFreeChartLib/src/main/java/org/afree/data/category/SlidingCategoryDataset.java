@@ -60,7 +60,6 @@ import java.util.List;
 
 import org.afree.data.UnknownKeyException;
 import org.afree.data.general.AbstractDataset;
-import org.afree.util.PublicCloneable;
 
 /**
  * A {@link CategoryDataset} implementation that presents a subset of the
@@ -120,7 +119,7 @@ public class SlidingCategoryDataset extends AbstractDataset implements CategoryD
 
     /**
      * Sets the index of the first category that should be used from the
-     * underlying dataset, and sends a {@link DatasetChangeEvent} to all
+     * underlying dataset, and sends a {@code DatasetChangeEvent} to all
      * registered listeners.
      *
      * @param first  the index.
@@ -147,7 +146,7 @@ public class SlidingCategoryDataset extends AbstractDataset implements CategoryD
     }
 
     /**
-     * Sets the maximum category count and sends a {@link DatasetChangeEvent}
+     * Sets the maximum category count and sends a {@code DatasetChangeEvent}
      * to all registered listeners.
      *
      * @param max  the maximum.
@@ -348,10 +347,7 @@ public class SlidingCategoryDataset extends AbstractDataset implements CategoryD
     }
 
     /**
-     * Returns an independent copy of the dataset.  Note that:
-     * <ul>
-     * <li>the underlying dataset is only cloned if it implements the
-     * {@link PublicCloneable} interface;</li>
+     * Returns an independent copy of the dataset.
      * <li>the listeners registered with this dataset are not carried over to
      * the cloned dataset.</li>
      * </ul>
@@ -363,11 +359,9 @@ public class SlidingCategoryDataset extends AbstractDataset implements CategoryD
      */
     public Object clone() throws CloneNotSupportedException {
         SlidingCategoryDataset clone = (SlidingCategoryDataset) super.clone();
-
-        if (this.underlying instanceof PublicCloneable) {
-            PublicCloneable pc = (PublicCloneable) this.underlying;
-            clone.underlying = (CategoryDataset) pc.clone();
-        }
+        clone.underlying = this.underlying;
+        clone.firstCategoryIndex = this.firstCategoryIndex;
+        clone.maximumCategoryCount = this.maximumCategoryCount;
 
         return clone;
     }

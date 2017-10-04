@@ -62,12 +62,12 @@ import java.util.List;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.ui.RectangleEdge;
 import org.afree.chart.axis.ValueAxis;
 import org.afree.data.xy.IntervalXYDataset;
 import org.afree.data.Range;
 import org.afree.data.xy.XYDataset;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.plot.CrosshairState;
 import org.afree.chart.plot.PlotOrientation;
 import org.afree.chart.plot.PlotRenderingInfo;
@@ -162,7 +162,7 @@ public class DeviationRenderer extends XYLineAndShapeRenderer {
 
     /**
      * Sets the alpha transparency for the background shading, and sends a
-     * {@link RendererChangeEvent} to all registered listeners.
+     * {@code RendererChangeEvent} to all registered listeners.
      *
      * @param alpha   the alpha (in the range 0.0f to 1.0f).
      *
@@ -375,7 +375,7 @@ public class DeviationRenderer extends XYLineAndShapeRenderer {
         else if (isItemPass(pass)) {
 
             // setup for collecting optional entity info...
-            EntityCollection entities = null;
+            List<ChartEntity> entities = null;
             if (info != null) {
                 entities = info.getOwner().getEntityCollection();
             }

@@ -110,7 +110,9 @@
 package org.afree.chart.renderer.category;
 
 import java.io.Serializable;
+import java.util.List;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.ui.GradientShaderFactory;
 import org.afree.ui.RectangleEdge;
 import org.afree.util.ShapeUtilities;
@@ -121,7 +123,6 @@ import org.afree.chart.axis.ValueAxis;
 import org.afree.data.category.CategoryDataset;
 import org.afree.data.Range;
 import org.afree.data.general.DatasetUtilities;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.event.RendererChangeEvent;
 import org.afree.chart.event.RendererChangeListener;
 import org.afree.chart.labels.CategoryItemLabelGenerator;
@@ -130,7 +131,6 @@ import org.afree.chart.labels.ItemLabelPosition;
 import org.afree.chart.plot.CategoryPlot;
 import org.afree.chart.plot.PlotOrientation;
 import org.afree.chart.plot.PlotRenderingInfo;
-import org.afree.chart.renderer.category.AbstractCategoryItemRenderer;
 import org.afree.chart.text.TextUtilities;
 import org.afree.graphics.geom.Font;
 import org.afree.graphics.geom.LineShape;
@@ -1117,7 +1117,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
                 datasetIndex, barW0, barL0, orientation);
 
         // add an item entity, if this information is being collected
-        EntityCollection entities = state.getEntityCollection();
+        List<ChartEntity> entities = state.getEntityCollection();
         if (entities != null) {
             addItemEntity(entities, dataset, row, column, bar);
         }

@@ -119,6 +119,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.ui.RectangleAnchor;
 import org.afree.ui.RectangleEdge;
 import org.afree.ui.RectangleInsets;
@@ -126,7 +127,6 @@ import org.afree.util.ShapeUtilities;
 import org.afree.ui.Size2D;
 import org.afree.data.category.CategoryDataset;
 import org.afree.chart.entity.CategoryLabelEntity;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.event.AxisChangeEvent;
 import org.afree.chart.plot.CategoryPlot;
 import org.afree.chart.plot.Plot;
@@ -1086,8 +1086,8 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
                         .getLabelAnchor(), (float) anchorPoint.x,
                         (float) anchorPoint.y, position.getAngle());
                 if (plotState != null && plotState.getOwner() != null) {
-                    EntityCollection entities = plotState.getOwner()
-                            .getEntityCollection();
+                    List<ChartEntity> entities = plotState.getOwner().
+                            entities;
                     if (entities != null) {
                         String tooltip = getCategoryLabelToolTip(tick
                                 .getCategory());

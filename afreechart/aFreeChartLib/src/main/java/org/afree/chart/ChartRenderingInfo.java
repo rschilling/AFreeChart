@@ -64,11 +64,11 @@
 package org.afree.chart;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.afree.chart.entity.ChartEntity;
 import org.afree.util.ObjectUtilities;
-import org.afree.util.PublicCloneable;
-import org.afree.chart.entity.EntityCollection;
-import org.afree.chart.entity.StandardEntityCollection;
 import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.graphics.geom.RectShape;
 
@@ -85,7 +85,7 @@ import org.afree.graphics.geom.RectShape;
  * <code>AFreeChart.draw()</code>, by passing an instance of this
  * <code>ChartRenderingInfo</code> class.
  */
-public class ChartRenderingInfo implements Cloneable,PublicCloneable, Serializable {
+public class ChartRenderingInfo implements Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 2751952018173406822L;
@@ -102,14 +102,14 @@ public class ChartRenderingInfo implements Cloneable,PublicCloneable, Serializab
      * intended that you can set this to <code>null</code> to prevent the
      * information being collected.
      */
-    private EntityCollection entities;
+    public List<ChartEntity> entities;
 
     /**
      * Constructs a new ChartRenderingInfo structure that can be used to collect
      * information about the dimensions of a rendered chart.
      */
     public ChartRenderingInfo() {
-        this(new StandardEntityCollection());
+        this(new ArrayList<ChartEntity>(0));
     }
 
     /**
@@ -121,10 +121,14 @@ public class ChartRenderingInfo implements Cloneable,PublicCloneable, Serializab
      * @param entities
      *            an entity collection (<code>null</code> permitted).
      */
-    public ChartRenderingInfo(EntityCollection entities) {
+    public ChartRenderingInfo(List<ChartEntity> entities) {
         this.chartArea = new RectShape();
         this.plotInfo = new PlotRenderingInfo(this);
         this.entities = entities;
+    }
+
+    public List<ChartEntity> getEntityCollection(){
+        return entities;
     }
 
     /**
@@ -150,28 +154,7 @@ public class ChartRenderingInfo implements Cloneable,PublicCloneable, Serializab
         this.chartArea.setRect(area);
     }
 
-    /**
-     * Returns the collection of entities maintained by this instance.
-     * 
-     * @return The entity collection (possibly <code>null</code>).
-     * 
-     * @see #setEntityCollection(EntityCollection)
-     */
-    public EntityCollection getEntityCollection() {
-        return this.entities;
-    }
 
-    /**
-     * Sets the entity collection.
-     * 
-     * @param entities
-     *            the entity collection (<code>null</code> permitted).
-     * 
-     * @see #getEntityCollection()
-     */
-    public void setEntityCollection(EntityCollection entities) {
-        this.entities = entities;
-    }
 
     /**
      * Clears the information recorded by this object.
@@ -220,23 +203,6 @@ public class ChartRenderingInfo implements Cloneable,PublicCloneable, Serializab
         return true;
     }    
     
-    /**
-     * Returns a clone of this object.
-     *
-     * @return A clone.
-     *
-     * @throws CloneNotSupportedException if the object cannot be cloned.
-     */
-    public Object clone() throws CloneNotSupportedException {
-        ChartRenderingInfo clone = (ChartRenderingInfo) super.clone();
-        if (this.chartArea != null) {
-            clone.chartArea = (RectShape) this.chartArea.clone();
-        }
-        if (this.entities instanceof PublicCloneable) {
-            PublicCloneable pc = (PublicCloneable) this.entities;
-            clone.entities = (EntityCollection) pc.clone();
-        }
-        return clone;
-    }    
+
     
 }

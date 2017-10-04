@@ -97,7 +97,6 @@ import android.graphics.Paint;
 import android.graphics.PathEffect;
 import android.graphics.Paint.FontMetrics;
 
-import org.afree.util.PublicCloneable;
 import org.afree.ui.RectangleEdge;
 import org.afree.io.SerialUtilities;
 import org.afree.ui.TextAnchor;
@@ -124,7 +123,7 @@ import org.afree.graphics.SolidColor;
  * the left or right of charts.
  */
 public class PeriodAxis extends ValueAxis
-        implements Cloneable, PublicCloneable, Serializable {
+        implements Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 8353295532075872069L;

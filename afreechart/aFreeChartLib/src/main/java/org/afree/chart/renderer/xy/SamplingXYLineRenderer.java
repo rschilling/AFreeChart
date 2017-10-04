@@ -59,7 +59,6 @@ import java.io.Serializable;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import org.afree.util.PublicCloneable;
 import org.afree.ui.RectangleEdge;
 import org.afree.util.ShapeUtilities;
 import org.afree.chart.LegendItem;
@@ -81,7 +80,7 @@ import org.afree.graphics.PaintUtility;
  * class.
  */
 public class SamplingXYLineRenderer extends AbstractXYItemRenderer
-        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
+        implements XYItemRenderer, Cloneable, Serializable {
 
     /**
      * 

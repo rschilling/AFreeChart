@@ -93,18 +93,19 @@ package org.afree.chart.renderer.xy;
 
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PathEffect;
-import org.afree.util.PublicCloneable;
+
+import org.afree.chart.entity.ChartEntity;
 import org.afree.ui.RectangleEdge;
 import org.afree.util.ShapeUtilities;
 import org.afree.chart.LegendItem;
 import org.afree.chart.axis.ValueAxis;
 import org.afree.data.xy.XYDataset;
-import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.entity.XYItemEntity;
 import org.afree.chart.event.RendererChangeEvent;
 import org.afree.chart.labels.XYToolTipGenerator;
@@ -129,7 +130,7 @@ import org.afree.graphics.PaintUtility;
  * alt="XYDifferenceRendererSample.png" />
  */
 public class XYDifferenceRenderer extends AbstractXYItemRenderer
-        implements XYItemRenderer, PublicCloneable {
+        implements XYItemRenderer {
 
     /** For serialization. */
     private static final long serialVersionUID = -8447915602375584857L;
@@ -889,9 +890,9 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
                                  CrosshairState x_crosshairState) {
 
         Shape l_entityArea = null;
-        EntityCollection l_entities = null;
+        List<ChartEntity> l_entities = null;
         if (null != x_info) {
-            l_entities = x_info.getOwner().getEntityCollection();
+            l_entities = x_info.getOwner().entities;
         }
 
         PaintType l_seriesPaintType = getItemPaintType(x_series, x_item);

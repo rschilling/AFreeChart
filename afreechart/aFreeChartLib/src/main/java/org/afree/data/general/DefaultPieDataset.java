@@ -75,8 +75,6 @@ import java.util.Collections;
 import java.util.List;
 
 
-
-import org.afree.util.PublicCloneable;
 import org.afree.util.SortOrder;
 import org.afree.data.DefaultKeyedValues;
 import org.afree.data.KeyedValues;
@@ -89,7 +87,7 @@ import org.afree.data.general.DatasetChangeEvent;
  * A default implementation of the {@link PieDataset} interface.
  */
 public class DefaultPieDataset extends AbstractDataset
-        implements PieDataset, Cloneable, PublicCloneable,  Serializable {
+        implements PieDataset, Cloneable,  Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = 2904745139106540618L;

@@ -145,6 +145,7 @@ import org.afree.chart.axis.DateAxis;
 import org.afree.chart.axis.NumberAxis;
 import org.afree.chart.axis.NumberAxis3D;
 import org.afree.chart.axis.ValueAxis;
+import org.afree.chart.title.Title;
 import org.afree.data.category.CategoryDataset;
 import org.afree.data.xy.IntervalXYDataset;
 import org.afree.data.xy.OHLCDataset;
@@ -177,6 +178,7 @@ import org.afree.chart.renderer.xy.XYBarRenderer;
 import org.afree.chart.renderer.xy.XYItemRenderer;
 import org.afree.chart.renderer.xy.XYLineAndShapeRenderer;
 
+import android.content.Context;
 import android.graphics.Color;
 
 /**
@@ -261,10 +263,10 @@ public abstract class ChartFactory {
      * 
      * @return A bar chart.
      */
-    public static AFreeChart createBarChart(String title,
-            String categoryAxisLabel, String valueAxisLabel,
-            CategoryDataset dataset, PlotOrientation orientation,
-            boolean legend, boolean tooltips, boolean urls) {
+    public static AFreeChart createBarChart(Context ctx, Title title,
+                                            String categoryAxisLabel, String valueAxisLabel,
+                                            CategoryDataset dataset, PlotOrientation orientation,
+                                            boolean legend, boolean tooltips, boolean urls) {
 
         if (orientation == null) {
             throw new IllegalArgumentException("Null 'orientation' argument.");
@@ -292,7 +294,7 @@ public abstract class ChartFactory {
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
                 renderer);
         plot.setOrientation(orientation);
-        AFreeChart chart = new AFreeChart(title, AFreeChart.DEFAULT_TITLE_FONT,
+        AFreeChart chart = new AFreeChart(ctx, title,
                 plot, legend);
         return chart;
 
@@ -324,7 +326,7 @@ public abstract class ChartFactory {
      * 
      * @return A bar chart.
      */
-    public static AFreeChart createSlidingBarChart(String title,
+    public static AFreeChart createSlidingBarChart(Context ctx, Title title,
             String categoryAxisLabel, String valueAxisLabel,
             CategoryDataset dataset, PlotOrientation orientation,
             boolean legend, boolean tooltips, boolean urls){
@@ -354,7 +356,7 @@ public abstract class ChartFactory {
 
         SlidingCategoryPlot plot = new SlidingCategoryPlot(dataset, categoryAxis, valueAxis, renderer);
         plot.setOrientation(orientation);
-        AFreeChart chart = new AFreeChart(title, AFreeChart.DEFAULT_TITLE_FONT, plot, legend);
+        AFreeChart chart = new AFreeChart(ctx, title, plot, legend);
         return chart;
     }
     
@@ -378,7 +380,7 @@ public abstract class ChartFactory {
      *
      * @return A bar chart with a 3D effect.
      */
-    public static AFreeChart createBarChart3D(String title,
+    public static AFreeChart createBarChart3D(Context ctx, Title title,
                                               String categoryAxisLabel,
                                               String valueAxisLabel,
                                               CategoryDataset dataset,
@@ -416,7 +418,7 @@ public abstract class ChartFactory {
         }
         plot.setForegroundAlpha(191);
 
-        AFreeChart chart = new AFreeChart(title, AFreeChart.DEFAULT_TITLE_FONT,
+        AFreeChart chart = new AFreeChart(ctx, title,
                 plot, legend);
         //currentTheme.apply(chart);
         return chart;
@@ -437,7 +439,7 @@ public abstract class ChartFactory {
      *
      * @return A pie chart.
      */
-    public static AFreeChart createPieChart(String title,
+    public static AFreeChart createPieChart(Context ctx, Title title,
                                             PieDataset dataset,
                                             boolean legend,
                                             boolean tooltips,
@@ -447,7 +449,7 @@ public abstract class ChartFactory {
         plot.setLabelGenerator(new StandardPieSectionLabelGenerator());
         plot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
       
-        AFreeChart chart = new AFreeChart(title, AFreeChart.DEFAULT_TITLE_FONT,
+        AFreeChart chart = new AFreeChart(ctx, title,
                 plot, legend);
         return chart;
     }
@@ -472,7 +474,7 @@ public abstract class ChartFactory {
      *
      * @return A line chart.
      */
-    public static AFreeChart createLineChart(String title,
+    public static AFreeChart createLineChart(Context ctx, Title title,
                                              String categoryAxisLabel,
                                              String valueAxisLabel,
                                              CategoryDataset dataset,
@@ -492,7 +494,7 @@ public abstract class ChartFactory {
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
                 renderer);
         plot.setOrientation(orientation);
-        AFreeChart chart = new AFreeChart(title, AFreeChart.DEFAULT_TITLE_FONT,
+        AFreeChart chart = new AFreeChart(ctx, title,
                 plot, legend);
         return chart;
 
@@ -514,7 +516,7 @@ public abstract class ChartFactory {
      *
      * @return The chart.
      */
-    public static AFreeChart createXYLineChart(String title,
+    public static AFreeChart createXYLineChart(Context ctx, Title title,
                                                String xAxisLabel,
                                                String yAxisLabel,
                                                XYDataset dataset,
@@ -540,7 +542,7 @@ public abstract class ChartFactory {
         plot.setOrientation(orientation);
       
         // Generate AFreeChart object.
-        AFreeChart chart = new AFreeChart(title, AFreeChart.DEFAULT_TITLE_FONT,
+        AFreeChart chart = new AFreeChart(ctx, title,
                 plot, legend);
         currentTheme.apply(chart);
         return chart;
@@ -561,7 +563,7 @@ public abstract class ChartFactory {
      *
      * @return A high-low-open-close chart.
      */
-    public static AFreeChart createHighLowChart(String title,
+    public static AFreeChart createHighLowChart(Context ctx, Title title,
                                                 String timeAxisLabel,
                                                 String valueAxisLabel,
                                                 OHLCDataset dataset,
@@ -579,7 +581,7 @@ public abstract class ChartFactory {
         XYPlot plot = new XYPlot(dataset, timeAxis, valueAxis, renderer);
         
         // Generate AFreeChart object.
-        AFreeChart chart = new AFreeChart(title, AFreeChart.DEFAULT_TITLE_FONT,
+        AFreeChart chart = new AFreeChart(ctx, title,
                 plot, legend);
         //currentTheme.apply(chart);
         return chart;
@@ -607,7 +609,7 @@ public abstract class ChartFactory {
      *
      * @return An area chart.
      */
-    public static AFreeChart createAreaChart(String title,
+    public static AFreeChart createAreaChart(Context ctx, Title title,
                                              String categoryAxisLabel,
                                              String valueAxisLabel,
                                              CategoryDataset dataset,
@@ -640,7 +642,7 @@ public abstract class ChartFactory {
         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
                 renderer);
         plot.setOrientation(orientation);
-        AFreeChart chart = new AFreeChart(title, AFreeChart.DEFAULT_TITLE_FONT,
+        AFreeChart chart = new AFreeChart(ctx, title,
                 plot, legend);
         //currentTheme.apply(chart);
         return chart;
@@ -662,7 +664,7 @@ public abstract class ChartFactory {
      *
      * @return A ring chart.
      */
-    public static AFreeChart createRingChart(String title,
+    public static AFreeChart createRingChart(Context ctx, Title title,
                                              PieDataset dataset,
                                              boolean legend,
                                              boolean tooltips,
@@ -679,7 +681,7 @@ public abstract class ChartFactory {
             plot.setURLGenerator(new StandardPieURLGenerator());
         }
         */
-        AFreeChart chart = new AFreeChart(title, AFreeChart.DEFAULT_TITLE_FONT,
+        AFreeChart chart = new AFreeChart(ctx, title,
                 plot, legend);
         //currentTheme.apply(chart);
         return chart;
@@ -708,7 +710,7 @@ public abstract class ChartFactory {
      *
      * @return An XY bar chart.
      */
-    public static AFreeChart createXYBarChart(String title,
+    public static AFreeChart createXYBarChart(Context ctx, Title title,
                                               String xAxisLabel,
                                               boolean dateAxis,
                                               String yAxisLabel,
@@ -750,7 +752,7 @@ public abstract class ChartFactory {
         XYPlot plot = new XYPlot(dataset, domainAxis, valueAxis, renderer);
         plot.setOrientation(orientation);
 
-        AFreeChart chart = new AFreeChart(title, AFreeChart.DEFAULT_TITLE_FONT,
+        AFreeChart chart = new AFreeChart(ctx, title,
                 plot, legend);
 //        currentTheme.apply(chart);
         return chart;
@@ -778,7 +780,7 @@ public abstract class ChartFactory {
      *
      * @return A time series chart.
      */
-    public static AFreeChart createTimeSeriesChart(String title,
+    public static AFreeChart createTimeSeriesChart(Context ctx, Title title,
                                                    String timeAxisLabel,
                                                    String valueAxisLabel,
                                                    XYDataset dataset,
@@ -815,7 +817,7 @@ public abstract class ChartFactory {
 //        renderer.setURLGenerator(urlGenerator);
         plot.setRenderer(renderer);
 
-        AFreeChart chart = new AFreeChart(title, AFreeChart.DEFAULT_TITLE_FONT,
+        AFreeChart chart = new AFreeChart(ctx, title,
                 plot, legend);
 //        currentTheme.apply(chart);
         return chart;
@@ -835,7 +837,7 @@ public abstract class ChartFactory {
      *
      * @return A candlestick chart.
      */
-    public static AFreeChart createCandlestickChart(String title,
+    public static AFreeChart createCandlestickChart(Context ctx, Title title,
                                                     String timeAxisLabel,
                                                     String valueAxisLabel,
                                                     OHLCDataset dataset,
@@ -845,7 +847,7 @@ public abstract class ChartFactory {
         NumberAxis valueAxis = new NumberAxis(valueAxisLabel);
         XYPlot plot = new XYPlot(dataset, timeAxis, valueAxis, null);
         plot.setRenderer(new CandlestickRenderer());
-        AFreeChart chart = new AFreeChart(title, AFreeChart.DEFAULT_TITLE_FONT,
+        AFreeChart chart = new AFreeChart(ctx, title,
                 plot, legend);
         // currentTheme.apply(chart);
         return chart;
@@ -871,7 +873,7 @@ public abstract class ChartFactory {
          *
          * @return A scatter plot.
          */
-        public static AFreeChart createScatterPlot(String title, String xAxisLabel,
+        public static AFreeChart createScatterPlot(Context ctx, Title title, String xAxisLabel,
                 String yAxisLabel, XYDataset dataset, PlotOrientation orientation,
                 boolean legend, boolean tooltips, boolean urls) {
     
@@ -900,7 +902,7 @@ public abstract class ChartFactory {
             plot.setRenderer(renderer);
             plot.setOrientation(orientation);
     
-            AFreeChart chart = new AFreeChart(title, AFreeChart.DEFAULT_TITLE_FONT,
+            AFreeChart chart = new AFreeChart(ctx, title,
                     plot, legend);
     //        currentTheme.apply(chart);
             return chart;

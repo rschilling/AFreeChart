@@ -57,7 +57,7 @@
 package org.afree.chart.annotations;
 
 import org.afree.chart.axis.ValueAxis;
-import org.afree.chart.entity.EntityCollection;
+import org.afree.chart.entity.ChartEntity;
 import org.afree.chart.entity.XYAnnotationEntity;
 import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.chart.plot.XYPlot;
@@ -65,6 +65,7 @@ import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.geom.Shape;
 import android.graphics.Canvas;
 
+import java.util.List;
 
 
 /**
@@ -89,7 +90,7 @@ public abstract class AbstractXYAnnotation implements XYAnnotation {
 
     /**
      * Returns the tool tip text for the annotation.  This will be displayed in
-     * a {@link org.afree.chart.demo.DemoView} when the mouse pointer hovers over
+     * a {@code org.afree.chart.demo.DemoView} when the mouse pointer hovers over
      * the annotation.
      *
      * @return The tool tip text (possibly <code>null</code>).
@@ -167,7 +168,7 @@ public abstract class AbstractXYAnnotation implements XYAnnotation {
         if (info == null) {
             return;
         }
-        EntityCollection entities = info.getOwner().getEntityCollection();
+        List<ChartEntity> entities = info.getOwner().entities;
         if (entities == null) {
             return;
         }

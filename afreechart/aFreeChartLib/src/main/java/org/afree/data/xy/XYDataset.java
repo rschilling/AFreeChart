@@ -67,7 +67,7 @@ import org.afree.data.general.SeriesDataset;
 /**
  * An interface through which data in the form of (x, y) items can be accessed.
  */
-public interface XYDataset extends SeriesDataset {
+public interface XYDataset extends SeriesDataset, Cloneable {
 
     /**
      * Returns the order of the domain (or X) values returned by the dataset.

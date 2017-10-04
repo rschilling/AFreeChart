@@ -65,18 +65,17 @@ package org.afree.data.xy;
 import java.util.Arrays;
 import java.util.Date;
 
-import org.afree.util.PublicCloneable;
 import org.afree.data.xy.OHLCDataset;
 import org.afree.data.xy.XYDataset;
 
 
 /**
  * A simple implementation of the {@link OHLCDataset} interface.  See also
- * the {@link DefaultOHLCDataset} class, which provides another implementation
+ * the {@code DefaultOHLCDataset} class, which provides another implementation
  * that is very similar.
  */
 public class DefaultHighLowDataset extends AbstractXYDataset
-        implements OHLCDataset, PublicCloneable {
+        implements OHLCDataset {
 
     /**
      * 
