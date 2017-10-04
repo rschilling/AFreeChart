@@ -174,7 +174,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.afree.ui.Align;
-import org.afree.ui.Drawable;
 import org.afree.ui.HorizontalAlignment;
 import org.afree.ui.RectangleEdge;
 import org.afree.ui.RectangleInsets;
@@ -182,11 +181,6 @@ import org.afree.ui.Size2D;
 import org.afree.ui.VerticalAlignment;
 import org.afree.util.ObjectUtilities;
 import org.afree.util.PaintTypeUtilities;
-import org.afree.chart.block.BlockParams;
-import org.afree.chart.block.EntityBlockResult;
-import org.afree.chart.block.LengthConstraintType;
-import org.afree.chart.block.LineBorder;
-import org.afree.chart.block.RectangleConstraint;
 import org.afree.data.Range;
 import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.entity.AFreeChartEntity;
@@ -203,7 +197,6 @@ import org.afree.chart.plot.Plot;
 import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.chart.plot.XYPlot;
 import org.afree.chart.title.LegendTitle;
-import org.afree.chart.title.TextTitle;
 import org.afree.chart.title.Title;
 import org.afree.graphics.geom.Font;
 import org.afree.graphics.geom.RectShape;
@@ -220,8 +213,11 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.Region.Op;
+import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * A chart class implemented using the Android APIs. The current version
@@ -244,66 +240,34 @@ import android.widget.LinearLayout;
 public class AFreeChart extends LinearLayout implements TitleChangeListener,
         PlotChangeListener  {
 
-    /** For serialization. */
-    private static final long serialVersionUID = -3470703747817429120L;
-
-    /** The default font for titles. */
-    public static final Font DEFAULT_TITLE_FONT = new Font("SansSerif",
-            Typeface.BOLD, 54);
-
-    /** The default background color. */
-    public static final PaintType DEFAULT_BACKGROUND_PAINT = new SolidColor(Color.LTGRAY);
-
-    /** The default background image alignment. */
-    public static final int DEFAULT_BACKGROUND_IMAGE_ALIGNMENT = Align.FIT;
-
-    /** The default background image alpha. */
-    public static final float DEFAULT_BACKGROUND_IMAGE_ALPHA = 0.5f;
-
-    /** A flag that controls whether or not the chart border is drawn. */
-    private boolean borderVisible;
-
-    /** The stroke used to draw the chart border (if visible). */
-    private transient float borderStroke;
-
-    /** The paint used to draw the chart border (if visible). */
-    private transient PaintType borderPaintType;
-
-    /** The padding between the chart border and the chart drawing area. */
-    private RectangleInsets padding;
-
-    /** The chart title (optional). */
-    private TextTitle title;
-
-    /** The default border effect. */
-    public static final PathEffect DEFAULT_BORDER_EFFECT = null;
-
-    /** The effect used to draw the chart border (if visible). */
-    private transient PathEffect borderEffect;
-    
-    /**
-     * The chart subtitles (zero, one or many). This field should never be
-     * <code>null</code>.
-     */
-    private List subtitles;
 
     /** Draws the visual representation of the data. */
     private Plot plot;
-
-    /** Paint used to draw the background of the chart. */
-    private transient PaintType backgroundPaintType;
 
     /** Storage for registered change listeners. */
     private transient List<ChartChangeListener> changeListeners;
 
     /** Storage for registered progress listeners. */
     private transient List<ChartProgressListener> progressListeners;
-    
+
+    private Title mTitle;
+    private Title mSubtitle;
+    private LegendTitle mLegend;
+
     /**
      * A flag that can be used to enable/disable notification of chart change
      * events.
      */
     private boolean notify;
+
+
+    public AFreeChart(Context context) {
+        super(context);
+    }
+
+    public AFreeChart(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
     /**
      * Creates a new chart with the given title and plot. The
@@ -316,9 +280,6 @@ public class AFreeChart extends LinearLayout implements TitleChangeListener,
      * 
      * @param title
      *            the chart title (<code>null</code> permitted).
-     * @param titleFont
-     *            the font for displaying the chart title (<code>null</code>
-     *            permitted).
      * @param plot
      *            controller of the visual representation of the data (
      *            <code>null</code> not permitted).
@@ -326,9 +287,10 @@ public class AFreeChart extends LinearLayout implements TitleChangeListener,
      *            a flag indicating whether or not a legend should be created
      *            for the chart.
      */
-    public AFreeChart(Context ctx, String title, Font titleFont, Plot plot,
+    public AFreeChart(Context ctx, Title title, Plot plot,
                       boolean createLegend) {
 
+        super(ctx);
         if (plot == null) {
             throw new NullPointerException("Null 'plot' argument.");
         }
@@ -337,39 +299,27 @@ public class AFreeChart extends LinearLayout implements TitleChangeListener,
         this.changeListeners = new CopyOnWriteArrayList<ChartChangeListener>();
         this.notify = true; // default is to notify listeners when the
 
-        this.borderVisible = true;
-        this.borderStroke = 2;
-        this.borderPaintType = new SolidColor(Color.WHITE);
-        this.borderEffect = DEFAULT_BORDER_EFFECT;
-
         this.plot = plot;
         plot.addChangeListener(this);
-
-        this.subtitles = new ArrayList();
 
         // create a legend, if requested...
         if (createLegend) {
             LegendTitle legend = new LegendTitle(ctx, this.plot);
-            this.subtitles.add(legend);
+            addView(legend);
             legend.addChangeListener(this);
         }
 
         // add the chart title, if one has been specified...
         if (title != null) {
-            if (titleFont == null) {
-                titleFont = DEFAULT_TITLE_FONT;
-            }
-            this.title = new TextTitle(title, titleFont);
-            this.title.addChangeListener(this);
-        }
+            mTitle = title;
+            addView(mTitle);
 
-        this.backgroundPaintType = DEFAULT_BACKGROUND_PAINT;
+        }
 
     }
 
     /**
-     * Creates a new chart with the given title and plot.  A default font
-     * ({@link #DEFAULT_TITLE_FONT}) is used for the title, and the chart will
+     * Creates a new chart with the given title and plot.  The chart will
      * have a legend added automatically.
      * <br><br>
      * Note that the {@link ChartFactory} class contains a range
@@ -379,8 +329,8 @@ public class AFreeChart extends LinearLayout implements TitleChangeListener,
      * @param title  the chart title (<code>null</code> permitted).
      * @param plot  the plot (<code>null</code> not permitted).
      */
-    public AFreeChart(String title, Plot plot) {
-        this(title, AFreeChart.DEFAULT_TITLE_FONT, plot, true);
+    public AFreeChart(Context ctx, Title title, Plot plot) {
+        this(ctx, title, plot, true);
     }
     
     /**
@@ -394,139 +344,8 @@ public class AFreeChart extends LinearLayout implements TitleChangeListener,
      *
      * @param plot  the plot (<code>null</code> not permitted).
      */
-    public AFreeChart(Plot plot) {
-        this(null, null, plot, true);
-    }
-    
-//    /**
-//     * Returns the collection of rendering hints for the chart.
-//     *
-//     * @return The rendering hints for the chart (never <code>null</code>).
-//     *
-//     * @see #setRenderingHints(RenderingHints)
-//     */
-//    public RenderingHints getRenderingHints() {
-//        return this.renderingHints;
-//    }
-//
-//    /**
-//     * Sets the rendering hints for the chart.  These will be added (using the
-//     * Graphics2D.addRenderingHints() method) near the start of the
-//     * JFreeChart.draw() method.
-//     *
-//     * @param renderingHints  the rendering hints (<code>null</code> not
-//     *                        permitted).
-//     *
-//     * @see #getRenderingHints()
-//     */
-//    public void setRenderingHints(RenderingHints renderingHints) {
-//        if (renderingHints == null) {
-//            throw new NullPointerException("RenderingHints given are null");
-//        }
-//        this.renderingHints = renderingHints;
-//        fireChartChanged();
-//    }
-    
-    /**
-     * Returns a flag that controls whether or not a border is drawn around the
-     * outside of the chart.
-     * 
-     * @return A boolean.
-     * 
-     * @see #setBorderVisible(boolean)
-     */
-    public boolean isBorderVisible() {
-        return this.borderVisible;
-    }
-
-    /**
-     * Sets a flag that controls whether or not a border is drawn around the
-     * outside of the chart.
-     * 
-     * @param visible
-     *            the flag.
-     * 
-     * @see #isBorderVisible()
-     */
-    public void setBorderVisible(boolean visible) {
-        this.borderVisible = visible;
-        fireChartChanged();
-    }
-
-    /**
-     * Returns the stroke used to draw the chart border (if visible).
-     * 
-     * @return The border stroke.
-     * 
-     * @see #setBorderStroke(float stroke)
-     */
-    public float getBorderStroke() {
-        return this.borderStroke;
-    }
-
-    /**
-     * Sets the stroke used to draw the chart border (if visible).
-     * 
-     * @param stroke
-     *            the stroke.
-     * 
-     * @see #getBorderStroke()
-     */
-    public void setBorderStroke(float stroke) {
-        this.borderStroke = stroke;
-        fireChartChanged();
-    }
-
-    /**
-     * Returns the paint used to draw the chart border (if visible).
-     * 
-     * @return The border paint.
-     * 
-     * @see #setBorderPaintType(PaintType paintType)
-     */
-    public PaintType getBorderPaintType() {
-        return this.borderPaintType;
-    }
-
-    /**
-     * Sets the paint used to draw the chart border (if visible).
-     * 
-     * @param paintType
-     *            the paintType.
-     * 
-     * @see #getBorderPaintType()
-     */
-    public void setBorderPaintType(PaintType paintType) {
-        this.borderPaintType = paintType;
-        fireChartChanged();
-    }
-
-    /**
-     * Returns the padding between the chart border and the chart drawing area.
-     * 
-     * @return The padding (never <code>null</code>).
-     * 
-     * @see #setPadding(RectangleInsets)
-     */
-    public RectangleInsets getPadding() {
-        return this.padding;
-    }
-
-    /**
-     * Sets the padding between the chart border and the chart drawing area, and
-     * sends a {@link ChartChangeEvent} to all registered listeners.
-     * 
-     * @param padding
-     *            the padding (<code>null</code> not permitted).
-     * 
-     * @see #getPadding()
-     */
-    public void setPadding(RectangleInsets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("Null 'padding' argument.");
-        }
-        this.padding = padding;
-        notifyListeners(new ChartChangeEvent(this));
+    public AFreeChart(Context ctx, Plot plot) {
+        this(ctx, null, plot, true);
     }
 
     /**
@@ -536,11 +355,10 @@ public class AFreeChart extends LinearLayout implements TitleChangeListener,
      * {@link #addSubtitle(Title)} method.
      * 
      * @return The chart title (possibly <code>null</code>).
-     * 
-     * @see #setTitle(TextTitle)
+     *
      */
-    public TextTitle getTitle() {
-        return this.title;
+    public Title getTitle() {
+        return mTitle;
     }
 
     /**
@@ -554,54 +372,11 @@ public class AFreeChart extends LinearLayout implements TitleChangeListener,
      * 
      * @see #getTitle()
      */
-    public void setTitle(TextTitle title) {
-        if (this.title != null) {
-            this.title.removeChangeListener(this);
-        }
-        this.title = title;
-        if (title != null) {
-            title.addChangeListener(this);
-        }
+    public void setTitle(Title title) {
+       mTitle = title;
         fireChartChanged();
     }
 
-    /**
-     * Sets the effect used to draw the chart border (if visible).
-     * 
-     * @param effect
-     *            the effect.
-     * 
-     * @see #getBorderEffect()
-     */
-    public void setBorderEffect(PathEffect effect) {
-        this.borderEffect = effect;
-        fireChartChanged();
-    }
-    
-    /**
-     * Sets the chart title and sends a {@link ChartChangeEvent} to all
-     * registered listeners. This is a convenience method that ends up calling
-     * the {@link #setTitle(TextTitle)} method. If there is an existing title,
-     * its text is updated, otherwise a new title using the default font is
-     * added to the chart. If <code>text</code> is <code>null</code> the chart
-     * title is set to <code>null</code>.
-     * 
-     * @param text
-     *            the title text (<code>null</code> permitted).
-     * 
-     * @see #getTitle()
-     */
-    public void setTitle(String text) {
-        if (text != null) {
-            if (this.title == null) {
-                setTitle(new TextTitle(text, AFreeChart.DEFAULT_TITLE_FONT));
-            } else {
-                this.title.setText(text);
-            }
-        } else {
-            setTitle((TextTitle) null);
-        }
-    }
 
     /**
      * Adds a legend to the plot and sends a {@link ChartChangeEvent} to all
@@ -609,8 +384,7 @@ public class AFreeChart extends LinearLayout implements TitleChangeListener,
      * 
      * @param legend
      *            the legend (<code>null</code> not permitted).
-     * 
-     * @see #removeLegend()
+     *
      */
     public void addLegend(LegendTitle legend) {
         addSubtitle(legend);
@@ -620,157 +394,26 @@ public class AFreeChart extends LinearLayout implements TitleChangeListener,
         if (subtitle == null) {
             throw new IllegalArgumentException("Null 'subtitle' argument.");
         }
-        this.subtitles.add(subtitle);
+
+        if (mSubtitle != null){
+            removeView(mSubtitle);
+        }
+        mSubtitle = subtitle;
+        addView(mSubtitle);
         subtitle.addChangeListener(this);
         fireChartChanged();
     }
 
-    /**
-     * Adds a subtitle at a particular position in the subtitle list, and sends
-     * a {@link ChartChangeEvent} to all registered listeners.
-     *
-     * @param index  the index (in the range 0 to {@link #getSubtitleCount()}).
-     * @param subtitle  the subtitle to add (<code>null</code> not permitted).
-     *
-     * @since 1.0.6
-     */
-    public void addSubtitle(int index, Title subtitle) {
-        if (index < 0 || index > getSubtitleCount()) {
-            throw new IllegalArgumentException(
-                    "The 'index' argument is out of range.");
-        }
-        if (subtitle == null) {
-            throw new IllegalArgumentException("Null 'subtitle' argument.");
-        }
-        this.subtitles.add(index, subtitle);
-        subtitle.addChangeListener(this);
-        fireChartChanged();
-    }
 
     /**
      * Returns the legend for the chart, if there is one. Note that a chart can
      * have more than one legend - this method returns the first.
      * 
      * @return The legend (possibly <code>null</code>).
-     * 
-     * @see #getLegend(int)
+     *
      */
     public LegendTitle getLegend() {
-        return getLegend(0);
-    }
-
-    /**
-     * Returns the nth legend for a chart, or <code>null</code>.
-     * 
-     * @param index
-     *            the legend index (zero-based).
-     * 
-     * @return The legend (possibly <code>null</code>).
-     * 
-     * @see #addLegend(LegendTitle)
-     */
-    public LegendTitle getLegend(int index) {
-        int seen = 0;
-        Iterator iterator = this.subtitles.iterator();
-        while (iterator.hasNext()) {
-            Title subtitle = (Title) iterator.next();
-            if (subtitle instanceof LegendTitle) {
-                if (seen == index) {
-                    return (LegendTitle) subtitle;
-                } else {
-                    seen++;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Removes the first legend in the chart and sends a
-     * {@link ChartChangeEvent} to all registered listeners.
-     * 
-     * @see #getLegend()
-     */
-    public void removeLegend() {
-        removeSubtitle(getLegend());
-    }
-
-    public void removeSubtitle(Title title) {
-        this.subtitles.remove(title);
-        fireChartChanged();
-    }
-
-    /**
-     * Returns the list of subtitles for the chart.
-     * 
-     * @return The subtitle list (possibly empty, but never <code>null</code>).
-     * 
-     * @see #setSubtitles(List)
-     */
-    public List getSubtitles() {
-        return new ArrayList(this.subtitles);
-    }
-
-    /**
-     * Sets the title list for the chart (completely replaces any existing
-     * titles) and sends a {@link ChartChangeEvent} to all registered listeners.
-     * 
-     * @param subtitles
-     *            the new list of subtitles (<code>null</code> not permitted).
-     * 
-     * @see #getSubtitles()
-     */
-    public void setSubtitles(List subtitles) {
-        if (subtitles == null) {
-            throw new NullPointerException("Null 'subtitles' argument.");
-        }
-        // setNotify(false);
-        clearSubtitles();
-        Iterator iterator = subtitles.iterator();
-        while (iterator.hasNext()) {
-            Title t = (Title) iterator.next();
-            if (t != null) {
-                addSubtitle(t);
-            }
-        }
-    }
-
-    public void clearSubtitles() {
-        Iterator iterator = this.subtitles.iterator();
-        while (iterator.hasNext()) {
-            Title t = (Title) iterator.next();
-            t.removeChangeListener(this);
-        }
-        this.subtitles.clear();
-        fireChartChanged();
-    }
-
-    /**
-     * Returns the number of titles for the chart.
-     * 
-     * @return The number of titles for the chart.
-     * 
-     * @see #getSubtitles()
-     */
-    public int getSubtitleCount() {
-        return this.subtitles.size();
-    }
-
-    /**
-     * Returns a chart subtitle.
-     * 
-     * @param index
-     *            the index of the chart subtitle (zero based).
-     * 
-     * @return A chart subtitle.
-     * 
-     * @see #addSubtitle(Title)
-     */
-    public Title getSubtitle(int index) {
-        if ((index < 0) || (index >= getSubtitleCount())) {
-            throw new IllegalArgumentException("Index out of range.");
-        }
-        return (Title) this.subtitles.get(index);
+        return mLegend;
     }
 
     /**
@@ -812,508 +455,7 @@ public class AFreeChart extends LinearLayout implements TitleChangeListener,
         return (XYPlot) this.plot;
     }
 
-    /**
-     * Returns the effect used to draw the chart border (if visible).
-     * 
-     * @return The border effect.
-     * 
-     * @see #setBorderEffect(PathEffect effect)
-     */
-    public PathEffect getBorderEffect() {
-        return this.borderEffect;
-    }
-    
-    /**
-     * Returns a flag that indicates whether or not anti-aliasing is used when
-     * the chart is drawn.
-     * 
-     * @return The flag.
-     * 
-     * @see #setAntiAlias(boolean)
-     */
-    // public boolean getAntiAlias() {
-    // Object val = this.renderingHints.get(RenderingHints.KEY_ANTIALIASING);
-    // return RenderingHints.VALUE_ANTIALIAS_ON.equals(val);
-    // }
-    /**
-     * Sets a flag that indicates whether or not anti-aliasing is used when the
-     * chart is drawn.
-     * <P>
-     * Anti-aliasing usually improves the appearance of charts, but is slower.
-     * 
-     * @param flag
-     *            the new value of the flag.
-     * 
-     * @see #getAntiAlias()
-     */
-    // public void setAntiAlias(boolean flag) {
-    // Object val = this.renderingHints.get(RenderingHints.KEY_ANTIALIASING);
-    // if (val == null) {
-    // val = RenderingHints.VALUE_ANTIALIAS_DEFAULT;
-    // }
-    // if (!flag && RenderingHints.VALUE_ANTIALIAS_OFF.equals(val)
-    /*
-     * || flag && RenderingHints.VALUE_ANTIALIAS_ON.equals(val)) { // no change,
-     * do nothing return; } if (flag) {
-     * this.renderingHints.put(RenderingHints.KEY_ANTIALIASING,
-     * RenderingHints.VALUE_ANTIALIAS_ON); } else {
-     * this.renderingHints.put(RenderingHints.KEY_ANTIALIASING,
-     * RenderingHints.VALUE_ANTIALIAS_OFF); fireChartChanged(); }
-     * 
-     * }
-     */
 
-    /**
-     * Returns the current value stored in the rendering hints table for
-     * {@link RenderingHints#KEY_TEXT_ANTIALIASING}.
-     * 
-     * @return The hint value (possibly <code>null</code>).
-     * 
-     * @since JFreeChart 1.0.5
-     * 
-     * @see #setTextAntiAlias(Object)
-     */
-    /*
-     * public Object getTextAntiAlias() { return
-     * this.renderingHints.get(RenderingHints.KEY_TEXT_ANTIALIASING);
-     *//**
-     * Sets the value in the rendering hints table for
-     * {@link RenderingHints#KEY_TEXT_ANTIALIASING} to either
-     * {@link RenderingHints#VALUE_TEXT_ANTIALIAS_ON} or
-     * {@link RenderingHints#VALUE_TEXT_ANTIALIAS_OFF}, then sends a
-     * {@link ChartChangeEvent} to all registered listeners.
-     * 
-     * @param flag
-     *            the new value of the flag.
-     * 
-     * @since JFreeChart 1.0.5
-     * 
-     * @see #getTextAntiAlias()
-     * @see #setTextAntiAlias(Object)
-     */
-    /*
-     * public void setTextAntiAlias(boolean flag) { if (flag) {
-     * setTextAntiAlias(RenderingHints.VALUE_TEXT_ANTIALIAS_ON); } else {
-     * setTextAntiAlias(RenderingHints.VALUE_TEXT_ANTIALIAS_OFF); } }
-     */
-
-    /**
-     * Sets the value in the rendering hints table for
-     * {@link RenderingHints#KEY_TEXT_ANTIALIASING} and sends a
-     * {@link ChartChangeEvent} to all registered listeners.
-     * 
-     * @param val
-     *            the new value (<code>null</code> permitted).
-     * 
-     * @since JFreeChart 1.0.5
-     * 
-     * @see #getTextAntiAlias()
-     * @see #setTextAntiAlias(boolean)
-     */
-    // public void setTextAntiAlias(Object val) {
-    // this.renderingHints.put(RenderingHints.KEY_TEXT_ANTIALIASING, val);
-    // notifyListeners(new ChartChangeEvent(this));
-    // }
-    /**
-     * Returns the paint used for the chart background.
-     * 
-     * @return The paint type (possibly <code>null</code>).
-     * 
-     * @see #setBackgroundPaintType(PaintType paintType)
-     */
-    public PaintType getBackgroundPaintType() {
-        return this.backgroundPaintType;
-    }
-
-    /**
-     * Sets the paint used to fill the chart background and sends a
-     * {@link ChartChangeEvent} to all registered listeners.
-     * 
-     * @param paintType
-     *            the paint (<code>null</code> permitted).
-     * 
-     * @see #getBackgroundPaintType()
-     */
-    public void setBackgroundPaintType(PaintType paintType) {
-
-        if (this.backgroundPaintType != null) {
-            if (!this.backgroundPaintType.equals(paintType)) {
-                this.backgroundPaintType = paintType;
-                fireChartChanged();
-            }
-        } else {
-            if (paintType != null) {
-                this.backgroundPaintType = paintType;
-                fireChartChanged();
-            }
-        }
-
-    }
-
-
-//    /**
-//     * Returns the background image for the chart, or <code>null</code> if
-//     * there is no image.
-//     *
-//     * @return The image (possibly <code>null</code>).
-//     *
-//     * @see #setBackgroundImage(Image)
-//     */
-//    public Image getBackgroundImage() {
-//        return this.backgroundImage;
-//    }
-//
-//    /**
-//     * Sets the background image for the chart and sends a
-//     * {@link ChartChangeEvent} to all registered listeners.
-//     *
-//     * @param image  the image (<code>null</code> permitted).
-//     *
-//     * @see #getBackgroundImage()
-//     */
-//    public void setBackgroundImage(Image image) {
-//
-//        if (this.backgroundImage != null) {
-//            if (!this.backgroundImage.equals(image)) {
-//                this.backgroundImage = image;
-//                fireChartChanged();
-//            }
-//        }
-//        else {
-//            if (image != null) {
-//                this.backgroundImage = image;
-//                fireChartChanged();
-//            }
-//        }
-//
-//    }
-//
-//    /**
-//     * Returns the background image alignment. Alignment constants are defined
-//     * in the <code>org.jfree.ui.Align</code> class in the JCommon class
-//     * library.
-//     *
-//     * @return The alignment.
-//     *
-//     * @see #setBackgroundImageAlignment(int)
-//     */
-//    public int getBackgroundImageAlignment() {
-//        return this.backgroundImageAlignment;
-//    }
-//
-//    /**
-//     * Sets the background alignment.  Alignment options are defined by the
-//     * {@link org.jfree.ui.Align} class.
-//     *
-//     * @param alignment  the alignment.
-//     *
-//     * @see #getBackgroundImageAlignment()
-//     */
-//    public void setBackgroundImageAlignment(int alignment) {
-//        if (this.backgroundImageAlignment != alignment) {
-//            this.backgroundImageAlignment = alignment;
-//            fireChartChanged();
-//        }
-//    }
-//
-//    /**
-//     * Returns the alpha-transparency for the chart's background image.
-//     *
-//     * @return The alpha-transparency.
-//     *
-//     * @see #setBackgroundImageAlpha(float)
-//     */
-//    public float getBackgroundImageAlpha() {
-//        return this.backgroundImageAlpha;
-//    }
-//
-//    /**
-//     * Sets the alpha-transparency for the chart's background image.
-//     * Registered listeners are notified that the chart has been changed.
-//     *
-//     * @param alpha  the alpha value.
-//     *
-//     * @see #getBackgroundImageAlpha()
-//     */
-//    public void setBackgroundImageAlpha(float alpha) {
-//
-//        if (this.backgroundImageAlpha != alpha) {
-//            this.backgroundImageAlpha = alpha;
-//            fireChartChanged();
-//        }
-//
-//    }
-    
-    /**
-     * Draws the chart on a graphics device (such as the screen or a
-     * printer).
-     * <P>
-     * This method is the focus of the entire AFreeChart library.
-     * 
-     * @param canvas
-     *            the graphics device.
-     * @param area
-     *            the area within which the chart should be drawn.
-     */
-    public void draw(Canvas canvas, RectShape area) {
-        draw(canvas, area, null, null);
-    }
-
-    /**
-     * Draws the chart on a graphics device (such as the screen or a
-     * printer). This method is the focus of the entire AFreeChart library.
-     * 
-     * @param canvas
-     *            the graphics device.
-     * @param area
-     *            the area within which the chart should be drawn.
-     * @param info
-     *            records info about the drawing (null means collect no info).
-     */
-    public void draw(Canvas canvas, RectShape area, ChartRenderingInfo info) {
-        draw(canvas, area, null, info);
-    }
-
-    /**
-     * Draws the chart on a graphics device (such as the screen or a
-     * printer).
-     * <P>
-     * This method is the focus of the entire AFreeChart library.
-     * 
-     * @param canvas
-     *            the graphics device.
-     * @param chartArea
-     *            the area within which the chart should be drawn.
-     * @param anchor
-     *            the anchor point (in Java2D space) for the chart (
-     *            <code>null</code> permitted).
-     * @param info
-     *            records info about the drawing (null means collect no info).
-     */
-    public void draw(Canvas canvas, RectShape chartArea, PointF anchor,
-            ChartRenderingInfo info) {
-        EntityCollection entities = null;
-        
-        notifyListeners(new ChartProgressEvent(this, this,
-                ChartProgressEvent.DRAWING_STARTED, 0));
-        
-        // record the chart area, if info is requested...
-        if (info != null) {
-            info.clear();
-            info.setChartArea(chartArea);
-            entities = info.getEntityCollection();
-        }
-        if (entities != null) {
-            entities.add(new AFreeChartEntity((RectShape) chartArea.clone(), this));
-        }
-        
-        Rect savedClip = canvas.getClipBounds();
-        // ensure no drawing occurs outside chart area...
-        canvas.clipRect((float) chartArea.getMinX(), (float) chartArea.getMinY(),
-                (float) chartArea.getMaxX() , (float) chartArea.getMaxY());
-
-        // draw the chart background...
-        if (this.backgroundPaintType != null) {
-            Paint paint = PaintUtility.createPaint(Paint.ANTI_ALIAS_FLAG, this.backgroundPaintType);
-            chartArea.fill(canvas, paint);
-        }
-
-        if (isBorderVisible()) {
-            PaintType paintType = getBorderPaintType();
-            if (paintType != null) {
-                RectShape borderArea = new RectShape(chartArea
-                        .getX(), chartArea.getY(), chartArea.getWidth() - 1.0,
-                        chartArea.getHeight() - 1.0);
-                Paint paint = PaintUtility.createPaint(borderPaintType, borderStroke, borderEffect);
-                borderArea.draw(canvas, paint);
-            }
-        }
-
-        // draw the title and subtitles...
-        RectShape nonTitleArea = new RectShape();
-        nonTitleArea.setRect(chartArea);
-        if (this.padding != null)
-            this.padding.trim(nonTitleArea);
-
-        if (this.title != null) {
-            EntityCollection e = drawTitle(this.title, canvas, nonTitleArea,
-                    (entities != null));
-            if (e != null) {
-                entities.addAll(e);
-            }
-        }
-
-        Iterator iterator = this.subtitles.iterator();
-        while (iterator.hasNext()) {
-            Title currentTitle = (Title) iterator.next();
-            if (currentTitle.isVisible()) {
-                EntityCollection e = drawTitle(currentTitle, canvas, nonTitleArea,
-                        (entities != null));
-                if (e != null) {
-                    entities.addAll(e);
-                }
-            }
-        }
-        
-        RectShape plotArea = nonTitleArea;
-
-        // draw the plot (axes and data visualisation)
-        PlotRenderingInfo plotInfo = null;
-        if (info != null) {
-            plotInfo = info.getPlotInfo();
-        }
-        this.plot.draw(canvas, plotArea, anchor, null, plotInfo);
-
-        canvas.clipRect(savedClip, Op.REPLACE);
-
-        notifyListeners(new ChartProgressEvent(this, this,
-                ChartProgressEvent.DRAWING_FINISHED, 100));
-    }
-
-    /**
-     * Creates a RectShape that is aligned to the frame.
-     * 
-     * @param dimensions
-     *            the dimensions for the RectShape.
-     * @param frame
-     *            the frame to align to.
-     * @param hAlign
-     *            the horizontal alignment.
-     * @param vAlign
-     *            the vertical alignment.
-     * 
-     * @return A RectShape.
-     */
-    private RectShape createAlignedRectShape(Size2D dimensions,
-            RectShape frame, HorizontalAlignment hAlign,
-            VerticalAlignment vAlign) {
-        double x = Double.NaN;
-        double y = Double.NaN;
-        if (hAlign == HorizontalAlignment.LEFT) {
-            x = frame.getX();
-        } else if (hAlign == HorizontalAlignment.CENTER) {
-            x = frame.getCenterX() - (dimensions.width / 2.0);
-        } else if (hAlign == HorizontalAlignment.RIGHT) {
-            x = frame.getMaxX() - dimensions.width;
-        }
-        if (vAlign == VerticalAlignment.TOP) {
-            y = frame.getY();
-        } else if (vAlign == VerticalAlignment.CENTER) {
-            y = frame.getCenterY() - (dimensions.height / 2.0);
-        } else if (vAlign == VerticalAlignment.BOTTOM) {
-            y = frame.getMaxY() - dimensions.height;
-        }
-
-        return new RectShape(x, y, dimensions.width, dimensions.height);
-    }
-
-    /**
-     * Draws a title. The title should be drawn at the top, bottom, left or
-     * right of the specified area, and the area should be updated to reflect
-     * the amount of space used by the title.
-     * 
-     * @param t
-     *            the title (<code>null</code> not permitted).
-     * @param canvas
-     *            the graphics device (<code>null</code> not permitted).
-     * @param area
-     *            the chart area, excluding any existing titles (
-     *            <code>null</code> not permitted).
-     * @param entities
-     *            a flag that controls whether or not an entity collection is
-     *            returned for the title.
-     * 
-     * @return An entity collection for the title (possibly <code>null</code>).
-     */
-    protected EntityCollection drawTitle(Title t, Canvas canvas, RectShape area,
-            boolean entities) {
-
-        if (t == null) {
-            throw new IllegalArgumentException("Null 't' argument.");
-        }
-        if (area == null) {
-            throw new IllegalArgumentException("Null 'area' argument.");
-        }
-        RectShape titleArea = new RectShape();
-        RectangleEdge position = t.getPosition();
-        double ww = area.getWidth();
-        if (ww <= 0.0) {
-            return null;
-        }
-        double hh = area.getHeight();
-        if (hh <= 0.0) {
-            return null;
-        }
-        RectangleConstraint constraint = new RectangleConstraint(ww, new Range(
-                0.0, ww), LengthConstraintType.RANGE, hh, new Range(0.0, hh),
-                LengthConstraintType.RANGE);
-        Object retValue = null;
-        BlockParams p = new BlockParams();
-        p.setGenerateEntities(entities);
-        if (position == RectangleEdge.TOP) {
-            Size2D size = t.arrange(canvas, constraint);
-            titleArea = createAlignedRectShape(size, area, t
-                    .getHorizontalAlignment(), VerticalAlignment.TOP);
-            retValue = t.draw(canvas, titleArea, p);
-            area.setRect(area.getX(), Math.min(area.getY() + size.height, area
-                    .getMaxY()), area.getWidth(), Math.max(area.getHeight()
-                    - size.height, 0));
-        } else if (position == RectangleEdge.BOTTOM) {
-            Size2D size = t.arrange(canvas, constraint);
-            titleArea = createAlignedRectShape(size, area, t
-                    .getHorizontalAlignment(), VerticalAlignment.BOTTOM);
-            retValue = t.draw(canvas, titleArea, p);
-            area.setRect(area.getX(), area.getY(), area.getWidth(), area
-                    .getHeight()
-                    - size.height);
-        } else if (position == RectangleEdge.RIGHT) {
-            Size2D size = t.arrange(canvas, constraint);
-            titleArea = createAlignedRectShape(size, area,
-                    HorizontalAlignment.RIGHT, t.getVerticalAlignment());
-            retValue = t.draw(canvas, titleArea, p);
-            area.setRect(area.getX(), area.getY(),
-                    area.getWidth() - size.width, area.getHeight());
-        }
-
-        else if (position == RectangleEdge.LEFT) {
-            Size2D size = t.arrange(canvas, constraint);
-            titleArea = createAlignedRectShape(size, area,
-                    HorizontalAlignment.LEFT, t.getVerticalAlignment());
-            retValue = t.draw(canvas, titleArea, p);
-            area.setRect(area.getX() + size.width, area.getY(), area.getWidth()
-                    - size.width, area.getHeight());
-        } else {
-            throw new RuntimeException("Unrecognised title position.");
-        }
-        EntityCollection result = null;
-        if (retValue instanceof EntityBlockResult) {
-            EntityBlockResult ebr = (EntityBlockResult) retValue;
-            result = ebr.getEntityCollection();
-        }
-        return result;
-    }
-
-    /**
-     * Handles a 'click' on the chart. AFreeChart is not a UI component, so some
-     * other object (for example, {@link DemoView}) needs to capture the click
-     * event and pass it onto the AFreeChart object. If you are not using
-     * AFreeChart in a client application, then this method is not required.
-     * 
-     * @param x
-     *            x-coordinate of the click (in Java2D space).
-     * @param y
-     *            y-coordinate of the click (in Java2D space).
-     * @param info
-     *            contains chart dimension and entity information (
-     *            <code>null</code> not permitted).
-     */
-    public void handleClick(int x, int y, ChartRenderingInfo info) {
-
-        // pass the click on to the plot...
-        // rely on the plot to post a plot change event and redraw the chart...
-        this.plot.handleClick(x, y, info.getPlotInfo());
-
-    }
 
     /**
      * Registers an object for notification of changes to the chart.
@@ -1430,45 +572,6 @@ public class AFreeChart extends LinearLayout implements TitleChangeListener,
         event.setChart(this);
         notifyListeners(event);
     }
-    
-    /**
-     * Clones the object, and takes care of listeners. Note: caller shall
-     * register its own listeners on cloned graph.
-     * 
-     * @return A clone.
-     * 
-     * @throws CloneNotSupportedException
-     *             if the chart is not cloneable.
-     */
-    public Object clone() throws CloneNotSupportedException {
-        AFreeChart chart = (AFreeChart) super.clone();
-
-//        chart.renderingHints = (RenderingHints) this.renderingHints.clone();
-        // private boolean borderVisible;
-        // private transient Stroke borderStroke;
-        // private transient Paint borderPaint;
-
-        if (this.title != null) {
-            chart.title = (TextTitle) this.title.clone();
-            chart.title.addChangeListener(chart);
-        }
-
-        chart.subtitles = new ArrayList();
-        for (int i = 0; i < getSubtitleCount(); i++) {
-            Title subtitle = (Title) getSubtitle(i).clone();
-            chart.subtitles.add(subtitle);
-            subtitle.addChangeListener(chart);
-        }
-
-        if (this.plot != null) {
-            chart.plot = (Plot) this.plot.clone();
-            chart.plot.addChangeListener(chart);
-        }
-
-        chart.progressListeners = new CopyOnWriteArrayList<ChartProgressListener>();
-        chart.changeListeners = new CopyOnWriteArrayList<ChartChangeListener>();
-        return chart;
-    }
 
     /**
      * Sets a flag that controls whether or not listeners receive
@@ -1476,8 +579,6 @@ public class AFreeChart extends LinearLayout implements TitleChangeListener,
      * 
      * @param notify
      *            a boolean.
-     * 
-     * @see #isNotify()
      */
     public void setNotify(boolean notify) {
         this.notify = notify;
@@ -1486,97 +587,5 @@ public class AFreeChart extends LinearLayout implements TitleChangeListener,
             notifyListeners(new ChartChangeEvent(this));
         }
     }
-    
-    /**
-     * Tests this chart for equality with another object.
-     *
-     * @param obj  the object (<code>null</code> permitted).
-     *
-     * @return A boolean.
-     */
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (!(obj instanceof AFreeChart)) {
-            return false;
-        }
-        AFreeChart that = (AFreeChart) obj;
-//        if (!this.renderingHints.equals(that.renderingHints)) {
-//            return false;
-//        }
-        if (this.borderVisible != that.borderVisible) {
-            return false;
-        }
-        if (!ObjectUtilities.equal(this.borderStroke, that.borderStroke)) {
-            return false;
-        }
-        if (!PaintTypeUtilities.equal(this.borderPaintType, that.borderPaintType)) {
-            return false;
-        }
-//        if (!this.padding.equals(that.padding)) {
-//            return false;
-//        }
-        if (!ObjectUtilities.equal(this.title, that.title)) {
-            return false;
-        }
-        if (!ObjectUtilities.equal(this.subtitles, that.subtitles)) {
-            return false;
-        }
-        if (!ObjectUtilities.equal(this.plot, that.plot)) {
-            return false;
-        }
-        if (!PaintTypeUtilities.equal(
-            this.backgroundPaintType, that.backgroundPaintType
-        )) {
-            return false;
-        }
-//        if (!ObjectUtilities.equal(this.backgroundImage,
-//                that.backgroundImage)) {
-//            return false;
-//        }
-//        if (this.backgroundImageAlignment != that.backgroundImageAlignment) {
-//            return false;
-//        }
-//        if (this.backgroundImageAlpha != that.backgroundImageAlpha) {
-//            return false;
-//        }
-        if (this.notify != that.notify) {
-            return false;
-        }
-        return true;
-    }
-    
-//    /**
-//     * Provides serialization support.
-//     *
-//     * @param stream  the input stream.
-//     *
-//     * @throws IOException  if there is an I/O error.
-//     * @throws ClassNotFoundException  if there is a classpath problem.
-//     */
-//    private void readObject(ObjectInputStream stream)
-//        throws IOException, ClassNotFoundException {
-//        stream.defaultReadObject();
-//        this.borderStroke = SerialUtilities.readStroke(stream);
-//        this.borderPaint = SerialUtilities.readPaint(stream);
-//        this.backgroundPaint = SerialUtilities.readPaint(stream);
-//        this.progressListeners = new EventListenerList();
-//        this.changeListeners = new EventListenerList();
-//        this.renderingHints = new RenderingHints(
-//                RenderingHints.KEY_ANTIALIASING,
-//                RenderingHints.VALUE_ANTIALIAS_ON);
-//
-//        // register as a listener with sub-components...
-//        if (this.title != null) {
-//            this.title.addChangeListener(this);
-//        }
-//
-//        for (int i = 0; i < getSubtitleCount(); i++) {
-//            getSubtitle(i).addChangeListener(this);
-//        }
-//        this.plot.addChangeListener(this);
-//    }
 
-    
 }

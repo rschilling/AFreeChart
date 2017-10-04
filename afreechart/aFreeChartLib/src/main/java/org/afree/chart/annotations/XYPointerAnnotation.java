@@ -72,6 +72,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -170,9 +171,9 @@ public class XYPointerAnnotation extends XYTextAnnotation
      * @param y  the y-coordinate (measured against the chart's range axis).
      * @param angle  the angle of the arrow's line (in radians).
      */
-    public XYPointerAnnotation(String label, double x, double y, double angle) {
+    public XYPointerAnnotation(Context ctx, String label, double x, double y, double angle) {
 
-        super(label, x, y);
+        super(ctx, label, x, y);
         this.angle = angle;
         this.tipRadius = DEFAULT_TIP_RADIUS;
         this.baseRadius = DEFAULT_BASE_RADIUS;

@@ -70,9 +70,6 @@ import org.afree.ui.RectangleEdge;
 import org.afree.ui.Size2D;
 import org.afree.chart.axis.AxisLocation;
 import org.afree.chart.axis.ValueAxis;
-import org.afree.chart.block.BlockParams;
-import org.afree.chart.block.EntityBlockResult;
-import org.afree.chart.block.RectangleConstraint;
 import org.afree.chart.HashUtilities;
 import org.afree.data.Range;
 import org.afree.chart.plot.Plot;
@@ -305,10 +302,13 @@ public class XYTitleAnnotation extends AbstractXYAnnotation
             maxW = this.maxWidth;
             maxH = this.maxHeight;
         }
-        RectangleConstraint rc = new RectangleConstraint(
-                new Range(0, maxW), new Range(0, maxH));
 
-        Size2D size = this.title.arrange(canvas, rc);
+        Size2D size = new Size2D();
+        // TODO: Assign a value.
+
+        // Size2D size = this.title.arrange(canvas, rc);
+
+
         RectShape titleRect = new RectShape(0, 0, size.width,
                 size.height);
         PointF anchorPoint = RectangleAnchor.coordinates(titleRect,
@@ -316,19 +316,9 @@ public class XYTitleAnnotation extends AbstractXYAnnotation
         xx = xx - (float) anchorPoint.x;
         yy = yy - (float) anchorPoint.y;
         titleRect.setRect(xx, yy, titleRect.getWidth(), titleRect.getHeight());
-        BlockParams p = new BlockParams();
+
+        this.title.draw(canvas);
         if (info != null) {
-            if (info.getOwner().getEntityCollection() != null) {
-                p.setGenerateEntities(true);
-            }
-        }
-        Object result = this.title.draw(canvas, titleRect, p);
-        if (info != null) {
-            if (result instanceof EntityBlockResult) {
-                EntityBlockResult ebr = (EntityBlockResult) result;
-                info.getOwner().getEntityCollection().addAll(
-                        ebr.getEntityCollection());
-            }
             String toolTip = getToolTipText();
             String url = getURL();
             if (toolTip != null || url != null) {
