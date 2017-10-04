@@ -84,13 +84,15 @@ import org.afree.util.ObjectUtilities;
 import org.afree.ui.RectangleEdge;
 import org.afree.ui.RectangleInsets;
 import org.afree.ui.VerticalAlignment;
-import org.afree.chart.block.AbstractBlock;
-import org.afree.chart.block.Block;
 import org.afree.chart.event.TitleChangeEvent;
 import org.afree.chart.event.TitleChangeListener;
 import org.afree.graphics.geom.RectShape;
 
+import android.content.Context;
 import android.graphics.Canvas;
+import android.util.AttributeSet;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 /**
  * The base class for all chart titles. A chart can have multiple titles,
@@ -99,40 +101,8 @@ import android.graphics.Canvas;
  * Concrete implementations of this class will render text and images, and hence
  * do the actual work of drawing titles.
  */
-public abstract class Title extends AbstractBlock implements Block, Cloneable,
-        Serializable {
+public abstract class Title extends LinearLayout {
 
-    /** For serialization. */
-    private static final long serialVersionUID = -6675162505277817221L;
-
-    /** The default title position. */
-    public static final RectangleEdge DEFAULT_POSITION = RectangleEdge.TOP;
-
-    /** The default horizontal alignment. */
-    public static final HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.CENTER;
-
-    /** The default vertical alignment. */
-    public static final VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.CENTER;
-
-    /** Default title padding. */
-    public static final RectangleInsets DEFAULT_PADDING = new RectangleInsets(
-            1, 1, 1, 1);
-
-    /**
-     * A flag that controls whether or not the title is visible.
-     * 
-     * @since JFreeChart 1.0.11
-     */
-    public boolean visible;
-
-    /** The title position. */
-    private RectangleEdge position;
-
-    /** The horizontal alignment of the title content. */
-    private HorizontalAlignment horizontalAlignment;
-
-    /** The vertical alignment of the title content. */
-    private VerticalAlignment verticalAlignment;
 
     /** Storage for registered change listeners. */
     private transient List<TitleChangeListener> listenerList;
@@ -142,188 +112,12 @@ public abstract class Title extends AbstractBlock implements Block, Cloneable,
      */
     private boolean notify;
 
-    /**
-     * Creates a new title, using default attributes where necessary.
-     */
-    protected Title() {
-        this(Title.DEFAULT_POSITION, Title.DEFAULT_HORIZONTAL_ALIGNMENT,
-                Title.DEFAULT_VERTICAL_ALIGNMENT, Title.DEFAULT_PADDING);
+    public Title(Context context) {
+        super(context);
     }
 
-    /**
-     * Creates a new title, using default attributes where necessary.
-     * 
-     * @param position
-     *            the position of the title (<code>null</code> not permitted).
-     * @param horizontalAlignment
-     *            the horizontal alignment of the title (<code>null</code> not
-     *            permitted).
-     * @param verticalAlignment
-     *            the vertical alignment of the title (<code>null</code> not
-     *            permitted).
-     */
-    protected Title(RectangleEdge position,
-            HorizontalAlignment horizontalAlignment,
-            VerticalAlignment verticalAlignment) {
-
-        this(position, horizontalAlignment, verticalAlignment,
-                Title.DEFAULT_PADDING);
-
-    }
-
-    /**
-     * Creates a new title.
-     * 
-     * @param position
-     *            the position of the title (<code>null</code> not permitted).
-     * @param horizontalAlignment
-     *            the horizontal alignment of the title (LEFT, CENTER or RIGHT,
-     *            <code>null</code> not permitted).
-     * @param verticalAlignment
-     *            the vertical alignment of the title (TOP, MIDDLE or BOTTOM,
-     *            <code>null</code> not permitted).
-     * @param padding
-     *            the amount of space to leave around the outside of the title (
-     *            <code>null</code> not permitted).
-     */
-    protected Title(RectangleEdge position,
-            HorizontalAlignment horizontalAlignment,
-            VerticalAlignment verticalAlignment, RectangleInsets padding) {
-
-        // check arguments...
-        if (position == null) {
-            throw new IllegalArgumentException("Null 'position' argument.");
-        }
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException(
-                    "Null 'horizontalAlignment' argument.");
-        }
-
-        if (verticalAlignment == null) {
-            throw new IllegalArgumentException(
-                    "Null 'verticalAlignment' argument.");
-        }
-        if (padding == null) {
-            throw new IllegalArgumentException("Null 'spacer' argument.");
-        }
-
-        this.visible = true;
-        this.position = position;
-        this.horizontalAlignment = horizontalAlignment;
-        this.verticalAlignment = verticalAlignment;
-        setPadding(padding);
-        this.listenerList = new CopyOnWriteArrayList<TitleChangeListener>();
-        this.notify = true;
-
-    }
-
-    /**
-     * Returns a flag that controls whether or not the title should be drawn.
-     * The default value is <code>true</code>.
-     * 
-     * @return A boolean.
-     * 
-     * @see #setVisible(boolean)
-     * 
-     * @since JFreeChart 1.0.11
-     */
-    public boolean isVisible() {
-        return this.visible;
-    }
-
-    /**
-     * Sets a flag that controls whether or not the title should be drawn, and
-     * sends a {@link TitleChangeEvent} to all registered listeners.
-     * 
-     * @param visible
-     *            the new flag value.
-     * 
-     * @see #isVisible()
-     * 
-     * @since JFreeChart 1.0.11
-     */
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-        notifyListeners(new TitleChangeEvent(this));
-    }
-
-    /**
-     * Returns the position of the title.
-     * 
-     * @return The title position (never <code>null</code>).
-     */
-    public RectangleEdge getPosition() {
-        return this.position;
-    }
-
-    /**
-     * Sets the position for the title and sends a {@link TitleChangeEvent} to
-     * all registered listeners.
-     * 
-     * @param position
-     *            the position (<code>null</code> not permitted).
-     */
-    public void setPosition(RectangleEdge position) {
-        if (position == null) {
-            throw new IllegalArgumentException("Null 'position' argument.");
-        }
-        if (this.position != position) {
-            this.position = position;
-            notifyListeners(new TitleChangeEvent(this));
-        }
-    }
-
-    /**
-     * Returns the horizontal alignment of the title.
-     * 
-     * @return The horizontal alignment (never <code>null</code>).
-     */
-    public HorizontalAlignment getHorizontalAlignment() {
-        return this.horizontalAlignment;
-    }
-
-    /**
-     * Sets the horizontal alignment for the title and sends a
-     * {@link TitleChangeEvent} to all registered listeners.
-     * 
-     * @param alignment
-     *            the horizontal alignment (<code>null</code> not permitted).
-     */
-    public void setHorizontalAlignment(HorizontalAlignment alignment) {
-        if (alignment == null) {
-            throw new IllegalArgumentException("Null 'alignment' argument.");
-        }
-        if (this.horizontalAlignment != alignment) {
-            this.horizontalAlignment = alignment;
-            notifyListeners(new TitleChangeEvent(this));
-        }
-    }
-
-    /**
-     * Returns the vertical alignment of the title.
-     * 
-     * @return The vertical alignment (never <code>null</code>).
-     */
-    public VerticalAlignment getVerticalAlignment() {
-        return this.verticalAlignment;
-    }
-
-    /**
-     * Sets the vertical alignment for the title, and notifies any registered
-     * listeners of the change.
-     * 
-     * @param alignment
-     *            the new vertical alignment (TOP, MIDDLE or BOTTOM,
-     *            <code>null</code> not permitted).
-     */
-    public void setVerticalAlignment(VerticalAlignment alignment) {
-        if (alignment == null) {
-            throw new IllegalArgumentException("Null 'alignment' argument.");
-        }
-        if (this.verticalAlignment != alignment) {
-            this.verticalAlignment = alignment;
-            notifyListeners(new TitleChangeEvent(this));
-       }
+    public Title(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
     /**
@@ -348,37 +142,6 @@ public abstract class Title extends AbstractBlock implements Block, Cloneable,
         if (flag) {
             notifyListeners(new TitleChangeEvent(this));
         }
-    }
-
-    /**
-     * Draws the title on a graphics device (such as the screen or a
-     * printer).
-     * 
-     * @param canvas
-     *            the graphics device.
-     * @param area
-     *            the area allocated for the title (subclasses should not draw
-     *            outside this area).
-     */
-    public abstract void draw(Canvas canvas, RectShape area);
-    
-    /**
-     * Returns a clone of the title.
-     * <P>
-     * One situation when this is useful is when editing the title properties -
-     * you can edit a clone, and then it is easier to cancel the changes if
-     * necessary.
-     *
-     * @return A clone of the title.
-     *
-     * @throws CloneNotSupportedException not thrown by this class, but it may
-     *         be thrown by subclasses.
-     */
-    public Object clone() throws CloneNotSupportedException {
-        Title duplicate = (Title) super.clone();
-        duplicate.listenerList = new CopyOnWriteArrayList<TitleChangeListener>();
-        // RectangleInsets is immutable => same reference in clone OK
-        return duplicate;
     }
 
     /**
@@ -432,34 +195,11 @@ public abstract class Title extends AbstractBlock implements Block, Cloneable,
             return false;
         }
         Title that = (Title) obj;
-        if (this.visible != that.visible) {
-            return false;
-        }
-        if (this.position != that.position) {
-            return false;
-        }
-        if (this.horizontalAlignment != that.horizontalAlignment) {
-            return false;
-        }
-        if (this.verticalAlignment != that.verticalAlignment) {
-            return false;
-        }
+
         if (this.notify != that.notify) {
             return false;
         }
         return super.equals(obj);
     }
-    /**
-     * Returns a hashcode for the title.
-     *
-     * @return The hashcode.
-     */
-    public int hashCode() {
-        int result = 193;
-        result = 37 * result + ObjectUtilities.hashCode(this.position);
-        result = 37 * result
-                + ObjectUtilities.hashCode(this.horizontalAlignment);
-        result = 37 * result + ObjectUtilities.hashCode(this.verticalAlignment);
-        return result;
-    }
+
 }

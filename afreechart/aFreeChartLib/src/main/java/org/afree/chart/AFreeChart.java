@@ -211,6 +211,7 @@ import org.afree.graphics.PaintType;
 import org.afree.graphics.PaintUtility;
 import org.afree.graphics.SolidColor;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -219,6 +220,8 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.Region.Op;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 /**
  * A chart class implemented using the Android APIs. The current version
@@ -238,8 +241,8 @@ import android.graphics.Region.Op;
  * @see Title
  * @see Plot
  */
-public class AFreeChart implements Drawable, TitleChangeListener,
-        PlotChangeListener, Serializable, Cloneable {
+public class AFreeChart extends LinearLayout implements TitleChangeListener,
+        PlotChangeListener  {
 
     /** For serialization. */
     private static final long serialVersionUID = -3470703747817429120L;
@@ -323,8 +326,8 @@ public class AFreeChart implements Drawable, TitleChangeListener,
      *            a flag indicating whether or not a legend should be created
      *            for the chart.
      */
-    public AFreeChart(String title, Font titleFont, Plot plot,
-            boolean createLegend) {
+    public AFreeChart(Context ctx, String title, Font titleFont, Plot plot,
+                      boolean createLegend) {
 
         if (plot == null) {
             throw new NullPointerException("Null 'plot' argument.");
@@ -346,12 +349,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
 
         // create a legend, if requested...
         if (createLegend) {
-            LegendTitle legend = new LegendTitle(this.plot);
-            legend.setMargin(new RectangleInsets(1.0, 1.0, 1.0, 1.0));
-            legend.setFrame(new LineBorder());
-            PaintType paintType = new SolidColor(Color.WHITE);
-            legend.setBackgroundPaintType(paintType);
-            legend.setPosition(RectangleEdge.BOTTOM);
+            LegendTitle legend = new LegendTitle(ctx, this.plot);
             this.subtitles.add(legend);
             legend.addChangeListener(this);
         }
