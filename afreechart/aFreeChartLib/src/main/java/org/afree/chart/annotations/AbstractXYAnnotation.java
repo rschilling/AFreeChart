@@ -63,6 +63,8 @@ import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.chart.plot.XYPlot;
 import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.geom.Shape;
+
+import android.content.Context;
 import android.graphics.Canvas;
 
 import java.util.List;
