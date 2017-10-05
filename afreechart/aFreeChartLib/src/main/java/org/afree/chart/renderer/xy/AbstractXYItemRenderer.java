@@ -1433,7 +1433,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
         }
         while (iterator.hasNext()) {
             XYAnnotation annotation = (XYAnnotation) iterator.next();
-            annotation.draw(canvas, this.plot, dataArea, domainAxis, rangeAxis, 0, info);
+            throw new UnsupportedOperationException("not implemnted yet");
         }
 
     }

@@ -65,30 +65,19 @@ import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.chart.plot.XYPlot;
 import org.afree.graphics.geom.RectShape;
 import android.graphics.Canvas;
-
+import android.view.View;
 
 
 /**
- * The interface that must be supported by annotations that are to be added to
- * an {@link XYPlot}.
+ * Marker interface that indicates an object can be treated as an annotation on a graph.
+ * This library uses RelativeLayout to draw charts and graphs.
  */
 public interface XYAnnotation {
 
     /**
-     * Draws the annotation.
-     *
-     * @param canvas  the graphics device.
-     * @param plot  the plot.
-     * @param dataArea  the data area.
-     * @param domainAxis  the domain axis.
-     * @param rangeAxis  the range axis.
-     * @param rendererIndex  the renderer index.
-     * @param info  an optional info object that will be populated with
-     *              entity information.
+     * Returns the view that should draw this annotation on the screen.
+     * @return
      */
-    public void draw(Canvas canvas, XYPlot plot, RectShape dataArea,
-                     ValueAxis domainAxis, ValueAxis rangeAxis,
-                     int rendererIndex,
-                     PlotRenderingInfo info);
+    public View getView();
 
 }

@@ -62,6 +62,7 @@ import java.io.Serializable;
 
 import android.graphics.Canvas;
 import android.graphics.PointF;
+import android.view.View;
 
 import org.afree.util.ObjectUtilities;
 import org.afree.ui.RectangleAnchor;
@@ -318,12 +319,11 @@ public class XYTitleAnnotation extends AbstractXYAnnotation
 
         this.title.draw(canvas);
         if (info != null) {
-            String toolTip = getToolTipText();
-            String url = getURL();
-            if (toolTip != null || url != null) {
+
+            if (toolTipText != null || url != null) {
                 addEntity(info, new RectShape(xx, yy,
                         (float) size.width, (float) size.height),
-                        rendererIndex, toolTip, url);
+                        rendererIndex, toolTipText, url);
             }
         }
     }
@@ -384,15 +384,10 @@ public class XYTitleAnnotation extends AbstractXYAnnotation
         return result;
     }
 
-    /**
-     * Returns a clone of the annotation.
-     *
-     * @return A clone.
-     *
-     * @throws CloneNotSupportedException  if the annotation can't be cloned.
-     */
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+
+    @Override
+    public View getView(){
+        return null;
     }
 
 }

@@ -224,6 +224,7 @@ import org.afree.util.Rotation;
 import org.afree.util.ShapeUtilities;
 import org.afree.util.UnitType;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -297,7 +298,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     /** The dataset for the pie chart. */
     private PieDataset dataset;
 
-    /** The pie index (used by the {@link MultiplePiePlot} class). */
+    /** The pie index (used by the {@code MultiplePiePlot} class). */
     private int pieIndex;
 
     /**
@@ -534,12 +535,6 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      */
     static final boolean DEBUG_DRAW_PIE_AREA = false;
 
-    /**
-     * Creates a new plot. The dataset is initially set to <code>null</code>.
-     */
-    public PiePlot() {
-        this(null);
-    }
 
     /**
      * Creates a plot that will draw a pie chart for the specified dataset.
@@ -547,8 +542,8 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * @param dataset
      *            the dataset (<code>null</code> permitted).
      */
-    public PiePlot(PieDataset dataset) {
-        super();
+    public PiePlot(Context ctx, PieDataset dataset) {
+        super(ctx);
         this.dataset = dataset;
         if (dataset != null) {
             dataset.addChangeListener(this);
@@ -644,7 +639,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     }
 
     /**
-     * Returns the pie index (this is used by the {@link MultiplePiePlot} class
+     * Returns the pie index (this is used by the {@code MultiplePiePlot} class
      * to track subplots).
      * 
      * @return The pie index.
@@ -656,7 +651,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     }
 
     /**
-     * Sets the pie index (this is used by the {@link MultiplePiePlot} class to
+     * Sets the pie index (this is used by the {@code MultiplePiePlot} class to
      * track subplots).
      * 
      * @param index
@@ -887,9 +882,9 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * <ul>
      * <li>if {@link #getSectionPaintType()} is non-<code>null</code>, return
      * it;</li>
-     * <li>if {@link #getSectionPaintType(int)} is non-<code>null</code> return
+     * <li>if {@code #getSectionPaintType(int)} is non-<code>null</code> return
      * it;</li>
-     * <li>if {@link #getSectionPaintType(int)} is <code>null</code> but
+     * <li>if {@code #getSectionPaintType(int)} is <code>null</code> but
      * <code>autoPopulate</code> is <code>true</code>, attempt to fetch a new
      * paint from the drawing supplier ({@link #getDrawingSupplier()});
      * <li>if all else fails, return {@link #getBaseSectionPaintType()}.
@@ -1151,9 +1146,9 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * <ul>
      * <li>if {@link #getSectionOutlinePaintType()} is non-<code>null</code>,
      * return it;</li>
-     * <li>otherwise, if {@link #getSectionOutlinePaintType(int)} is non-
+     * <li>otherwise, if {@code #getSectionOutlinePaintType(int)} is non-
      * <code>null</code> return it;</li>
-     * <li>if {@link #getSectionOutlinePaintType(int)} is <code>null</code> but
+     * <li>if {@code #getSectionOutlinePaintType(int)} is <code>null</code> but
      * <code>autoPopulate</code> is <code>true</code>, attempt to fetch a new
      * outline paint from the drawing supplier ({@link #getDrawingSupplier()});
      * <li>if all else fails, return {@link #getBaseSectionOutlinePaintType()}.
@@ -1344,9 +1339,9 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * <ul>
      * <li>if {@link #getSectionOutlineStroke()} is non-<code>null</code>,
      * return it;</li>
-     * <li>otherwise, if {@link #getSectionOutlineStroke(int)} is non-
+     * <li>otherwise, if {@code #getSectionOutlineStroke(int)} is non-
      * <code>null</code> return it;</li>
-     * <li>if {@link #getSectionOutlineStroke(int)} is <code>null</code> but
+     * <li>if {@code #getSectionOutlineStroke(int)} is <code>null</code> but
      * <code>autoPopulate</code> is <code>true</code>, attempt to fetch a new
      * outline stroke from the drawing supplier ({@link #getDrawingSupplier()});
      * <li>if all else fails, return {@link #getBaseSectionOutlineStroke()}.
@@ -1413,9 +1408,9 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * <ul>
      * <li>if {@link #getSectionOutlineEffect()} is non-<code>null</code>,
      * return it;</li>
-     * <li>otherwise, if {@link #getSectionOutlineEffect(int)} is non-
+     * <li>otherwise, if {@code #getSectionOutlineEffect(int)} is non-
      * <code>null</code> return it;</li>
-     * <li>if {@link #getSectionOutlineEffect(int)} is <code>null</code> but
+     * <li>if {@code #getSectionOutlineEffect(int)} is <code>null</code> but
      * <code>autoPopulate</code> is <code>true</code>, attempt to fetch a new
      * outline effect from the drawing supplier ({@link #getDrawingSupplier()});
      * <li>if all else fails, return {@link #getBaseSectionOutlineEffect()}.
@@ -1596,7 +1591,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      *
      * @return The effect (never <code>null</code>).
      *
-     * @see #setBaseSectionOutlineEffect(effect)
+     * @see {@code #setBaseSectionOutlineEffect(effect)}
      */
     public PathEffect getBaseSectionOutlineEffect() {
         return this.baseSectionOutlineEffect;
@@ -3353,12 +3348,10 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * Sets the paint for ALL sections in the plot.  If this is set to
      * </code>null</code>, then a list of paints is used instead (to allow
      * different colors to be used for each section).
-     *
-     * @param paint  the paint (<code>null</code> permitted).
-     *
+
      * @see #getSectionPaintType()
      *
-     * @deprecated Use {@link #setSectionPaintType(Comparable, Paint)} and
+     * @deprecated Use {@code #setSectionPaintType(Comparable, Paint)} and
      *     {@link #setBaseSectionPaintType(PaintType)}.  
      *     Deprecated as of JFreeChart version 1.0.6.
      */
@@ -3371,9 +3364,6 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * Sets the outline paint for ALL sections in the plot.  If this is set to
      * </code>null</code>, then a list of paints is used instead (to allow
      * different colors to be used for each section).
-     *
-     * @param paint  the paint type (<code>null</code> permitted).
-     *
      * @see #getSectionOutlinePaintType()
      *
      * @deprecated Use {@link #setSectionOutlinePaintType(Comparable, PaintType)} and
@@ -3395,7 +3385,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * @see #getSectionOutlineStroke()
      *
      * @deprecated Use {@link #setSectionOutlineStroke(Comparable, Float)} and
-     *     {@link #setBaseSectionOutlineStroke(Stroke)}.  Deprecated as of
+     *     {@code #setBaseSectionOutlineStroke(Stroke)}.  Deprecated as of
      *     version JFreeChart 1.0.6.
      */
     public void setSectionOutlineStroke(Float stroke) {

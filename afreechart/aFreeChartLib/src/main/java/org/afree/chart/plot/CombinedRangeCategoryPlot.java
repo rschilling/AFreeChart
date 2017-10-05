@@ -93,6 +93,8 @@ import org.afree.data.Range;
 import org.afree.chart.event.PlotChangeEvent;
 import org.afree.chart.event.PlotChangeListener;
 import org.afree.graphics.geom.RectShape;
+
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 
@@ -114,20 +116,17 @@ public class CombinedRangeCategoryPlot extends CategoryPlot
     /** Temporary storage for the subplot areas. */
     private transient RectShape[] subplotArea;  // TODO: move to plot state
 
-    /**
-     * Default constructor.
-     */
-    public CombinedRangeCategoryPlot() {
-        this(new NumberAxis());
-    }
 
     /**
      * Creates a new plot.
      *
      * @param rangeAxis  the shared range axis.
      */
-    public CombinedRangeCategoryPlot(ValueAxis rangeAxis) {
-        super(null, null, rangeAxis, null);
+    public CombinedRangeCategoryPlot(Context ctx, ValueAxis rangeAxis) {
+
+        super(ctx);
+
+        initialize(null, null, rangeAxis, null);
         this.subplots = new java.util.ArrayList();
         this.gap = 5.0;
     }

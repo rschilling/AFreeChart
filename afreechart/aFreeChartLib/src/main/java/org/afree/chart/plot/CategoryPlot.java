@@ -240,6 +240,7 @@ import org.afree.graphics.PaintType;
 import org.afree.graphics.PaintUtility;
 import org.afree.graphics.SolidColor;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -247,6 +248,7 @@ import android.graphics.Paint;
 import android.graphics.PathEffect;
 import android.graphics.PointF;
 import android.graphics.Typeface;
+import android.util.AttributeSet;
 
 /**
  * A general plotting class that uses data from a {@link CategoryDataset} and
@@ -558,11 +560,17 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     private boolean rangePannable;
 
-    /**
-     * Default constructor.
-     */
-    public CategoryPlot() {
-        this(null, null, null, null);
+
+    public CategoryPlot(Context context) {
+        super(context);
+    }
+
+    public CategoryPlot(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public CategoryPlot(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
     }
 
     /**
@@ -578,10 +586,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      *            the item renderer (<code>null</code> permitted).
      * 
      */
-    public CategoryPlot(CategoryDataset dataset, CategoryAxis domainAxis,
+    public void initialize(CategoryDataset dataset, CategoryAxis domainAxis,
             ValueAxis rangeAxis, CategoryItemRenderer renderer) {
 
-        super();
 
         this.orientation = PlotOrientation.VERTICAL;
 
@@ -769,7 +776,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             result = (CategoryAxis) this.domainAxes.get(index);
         }
         if (result == null) {
-            Plot parent = getParent();
+            Plot parent = getParentPlot();
             if (parent instanceof CategoryPlot) {
                 CategoryPlot cp = (CategoryPlot) parent;
                 result = cp.getDomainAxis(index);
@@ -1068,7 +1075,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             result = (ValueAxis) this.rangeAxes.get(index);
         }
         if (result == null) {
-            Plot parent = getParent();
+            Plot parent = getParentPlot();
             if (parent instanceof CategoryPlot) {
                 CategoryPlot cp = (CategoryPlot) parent;
                 result = cp.getRangeAxis(index);
@@ -1166,7 +1173,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         }
         int result = this.rangeAxes.indexOf(axis);
         if (result < 0) { // try the parent plot
-            Plot parent = getParent();
+            Plot parent = getParentPlot();
             if (parent instanceof CategoryPlot) {
                 CategoryPlot p = (CategoryPlot) parent;
                 result = p.getRangeAxisIndex(axis);
@@ -2477,8 +2484,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
                 yAxis.configure();
             }
         }
-        if (getParent() != null) {
-            getParent().datasetChanged(event);
+        if (getParentPlot() != null) {
+            getParentPlot().datasetChanged(event);
         }
         else {
             PlotChangeEvent e = new PlotChangeEvent(this);
@@ -2494,7 +2501,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * @param event  the event.
      */
     public void rendererChanged(RendererChangeEvent event) {
-        Plot parent = getParent();
+        Plot parent = getParentPlot();
         if (parent != null) {
             if (parent instanceof RendererChangeListener) {
                 RendererChangeListener rcl = (RendererChangeListener) parent;

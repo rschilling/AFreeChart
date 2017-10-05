@@ -50,6 +50,7 @@ import org.afree.chart.renderer.category.CategoryItemRenderer;
 import org.afree.data.category.CategoryDataset;
 import org.afree.data.category.SlidingCategoryDataset;
 
+import android.content.Context;
 import android.graphics.PointF;
 
 /**
@@ -81,8 +82,8 @@ public class SlidingCategoryPlot extends CategoryPlot implements Serializable {
     /**
      * Default constructor.
      */
-    public SlidingCategoryPlot() {
-        this(null, null, null, null);
+    public SlidingCategoryPlot(Context ctx) {
+        this(ctx, null, null, null, null);
     }
 
     /**
@@ -98,9 +99,10 @@ public class SlidingCategoryPlot extends CategoryPlot implements Serializable {
      *            the item renderer (<code>null</code> permitted).
      * 
      */
-    public SlidingCategoryPlot(CategoryDataset dataset, CategoryAxis domainAxis,
-            ValueAxis rangeAxis, CategoryItemRenderer renderer) {
-        super(dataset, domainAxis, rangeAxis, renderer);
+    public SlidingCategoryPlot(Context ctx, CategoryDataset dataset, CategoryAxis domainAxis,
+                               ValueAxis rangeAxis, CategoryItemRenderer renderer) {
+        super(ctx);
+        initialize(dataset, domainAxis, rangeAxis, renderer);
         this.mPreviousTime = System.currentTimeMillis();
         
         if (dataset != null) {
@@ -140,8 +142,6 @@ public class SlidingCategoryPlot extends CategoryPlot implements Serializable {
      * Return the slide ratio.
      * 
      * @return The slide ratio.
-     * 
-     * @see #setSlideRatio()
      */
     public float getSlideRatio() {
         return mSlideRatio;

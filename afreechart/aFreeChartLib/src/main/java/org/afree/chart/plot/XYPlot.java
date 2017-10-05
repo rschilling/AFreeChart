@@ -286,13 +286,19 @@ import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.PaintType;
 import org.afree.graphics.PaintUtility;
 import org.afree.graphics.SolidColor;
+
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.PathEffect;
 import android.graphics.PointF;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 
 /**
  * A general class for plotting data in the form of (x, y) pairs. This plot can
@@ -607,12 +613,17 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      */
     private boolean rangePannable;
 
-    /**
-     * Creates a new <code>XYPlot</code> instance with no dataset, no axes and
-     * no renderer. You should specify these items before using the plot.
-     */
-    public XYPlot() {
-        this(null, null, null, null);
+
+    public XYPlot(Context context) {
+        super(context);
+    }
+
+    public XYPlot(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public XYPlot(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
     }
 
     /**
@@ -630,10 +641,9 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @param renderer
      *            the renderer (<code>null</code> permitted).
      */
-    public XYPlot(XYDataset dataset, ValueAxis domainAxis, ValueAxis rangeAxis,
+    public void initialize(XYDataset dataset, ValueAxis domainAxis, ValueAxis rangeAxis,
             XYItemRenderer renderer) {
 
-        super();
 
         this.orientation = PlotOrientation.VERTICAL;
         this.weight = 1; // only relevant when this is a subplot
@@ -827,7 +837,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             result = (ValueAxis) this.domainAxes.get(index);
         }
         if (result == null) {
-            Plot parent = getParent();
+            Plot parent = getParentPlot();
             if (parent instanceof XYPlot) {
                 XYPlot xy = (XYPlot) parent;
                 result = xy.getDomainAxis(index);
@@ -1211,7 +1221,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             result = (ValueAxis) this.rangeAxes.get(index);
         }
         if (result == null) {
-            Plot parent = getParent();
+            Plot parent = getParentPlot();
             if (parent instanceof XYPlot) {
                 XYPlot xy = (XYPlot) parent;
                 result = xy.getRangeAxis(index);
@@ -3550,7 +3560,6 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             drawRangeMarkers(canvas, dataArea, i, Layer.FOREGROUND);
         }
 
-        drawAnnotations(canvas, dataArea, info);
         canvas.restore();
         drawOutline(canvas, dataArea);
 
@@ -4162,7 +4171,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     }
 
     /**
-     * Draws the annotations for the plot.
+     * Adds annotations to the parent view
      * 
      * @param canvas
      *            the graphics device.
@@ -4174,13 +4183,18 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void drawAnnotations(Canvas canvas, RectShape dataArea,
             PlotRenderingInfo info) {
 
-        Iterator iterator = this.annotations.iterator();
-        while (iterator.hasNext()) {
-            XYAnnotation annotation = (XYAnnotation) iterator.next();
-            ValueAxis xAxis = getDomainAxis();
-            ValueAxis yAxis = getRangeAxis();
-            annotation.draw(canvas, this, dataArea, xAxis, yAxis, 0, info);
+        ViewParent viewParent = getParent();
+        if (viewParent != null && viewParent instanceof ViewGroup){
+            ViewGroup vGroup = (ViewGroup)viewParent;
+            Iterator iterator = this.annotations.iterator();
+            while (iterator.hasNext()) {
+                XYAnnotation annotation = (XYAnnotation) iterator.next();
+                vGroup.addView(annotation.getView());
+                ValueAxis xAxis = getDomainAxis();
+                ValueAxis yAxis = getRangeAxis();
+            }
         }
+
 
     }
 
@@ -4607,7 +4621,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         int result = this.domainAxes.indexOf(axis);
         if (result < 0) {
             // try the parent plot
-            Plot parent = getParent();
+            Plot parent = getParentPlot();
             if (parent instanceof XYPlot) {
                 XYPlot p = (XYPlot) parent;
                 result = p.getDomainAxisIndex(axis);
@@ -4630,7 +4644,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         int result = this.rangeAxes.indexOf(axis);
         if (result < 0) {
             // try the parent plot
-            Plot parent = getParent();
+            Plot parent = getParentPlot();
             if (parent instanceof XYPlot) {
                 XYPlot p = (XYPlot) parent;
                 result = p.getRangeAxisIndex(axis);
@@ -4754,8 +4768,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      public void datasetChanged(DatasetChangeEvent event) {
          configureDomainAxes();
          configureRangeAxes();
-         if (getParent() != null) {
-             getParent().datasetChanged(event);
+         if (getParentPlot() != null) {
+             getParentPlot().datasetChanged(event);
          } else {
              PlotChangeEvent e = new PlotChangeEvent(this);
              e.setType(ChartChangeEventType.DATASET_UPDATED);
@@ -4881,7 +4895,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     }
 
     /**
-     * Returns the {@link Stroke} used to draw the crosshair (if visible).
+     * Returns the {@code Stroke} used to draw the crosshair (if visible).
      * 
      * @return The crosshair stroke (never <code>null</code>).
      * 
@@ -4960,7 +4974,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * Sets the effect used to draw the crosshairs (if visible) and notifies
      * registered listeners that the axis has been modified.
      * 
-     * @param effect
+     * @param pathEffect
      *            the new crosshair effect (<code>null</code> not permitted).
      * 
      * @see #getDomainCrosshairEffect()
@@ -5744,7 +5758,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * Sets the effect for the grid lines plotted against the range axis, and
      * sends a {@link PlotChangeEvent} to all registered listeners.
      * 
-     * @param effect
+     * @param rangeGridlineEffect
      *            the effect (<code>null</code> not permitted).
      * 
      * @see #getRangeGridlineEffect()
@@ -5771,7 +5785,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * Sets the effect for the minor grid lines plotted against the domain axis,
      * and sends a {@link PlotChangeEvent} to all registered listeners.
      * 
-     * @param effect
+     * @param domainMinorGridlineEffect
      *            the effect (<code>null</code> not permitted).
      * 
      * @see #getDomainMinorGridlineEffect()
@@ -5799,7 +5813,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * Sets the effect for the minor grid lines plotted against the range axis,
      * and sends a {@link PlotChangeEvent} to all registered listeners.
      * 
-     * @param effect
+     * @param rangeMinorGridlineEffect
      *            the effect (<code>null</code> not permitted).
      * 
      * @see #getRangeMinorGridlineEffect()

@@ -127,6 +127,8 @@ import org.afree.chart.event.PlotChangeEvent;
 import org.afree.chart.event.PlotChangeListener;
 import org.afree.chart.renderer.xy.XYItemRenderer;
 import org.afree.graphics.geom.RectShape;
+
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 
@@ -152,12 +154,6 @@ public class CombinedDomainXYPlot extends XYPlot
     // TODO:  the subplot areas needs to be moved out of the plot into the plot
     //        state
 
-    /**
-     * Default constructor.
-     */
-    public CombinedDomainXYPlot() {
-        this(new NumberAxis());
-    }
 
     /**
      * Creates a new combined plot that shares a domain axis among multiple
@@ -165,9 +161,9 @@ public class CombinedDomainXYPlot extends XYPlot
      *
      * @param domainAxis  the shared axis.
      */
-    public CombinedDomainXYPlot(ValueAxis domainAxis) {
-
-        super(
+    public CombinedDomainXYPlot(Context ctx, ValueAxis domainAxis) {
+        super(ctx);
+        initialize(
             null,        // no data in the parent plot
             domainAxis,
             null,        // no range axis

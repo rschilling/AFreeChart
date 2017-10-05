@@ -95,6 +95,8 @@ import org.afree.data.Range;
 import org.afree.chart.event.PlotChangeEvent;
 import org.afree.chart.event.PlotChangeListener;
 import org.afree.graphics.geom.RectShape;
+
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 
@@ -117,12 +119,6 @@ public class CombinedDomainCategoryPlot extends CategoryPlot
     private transient RectShape[] subplotAreas;
     // TODO:  move the above to the plot state
 
-    /**
-     * Default constructor.
-     */
-    public CombinedDomainCategoryPlot() {
-        this(new CategoryAxis());
-    }
 
     /**
      * Creates a new plot.
@@ -130,8 +126,9 @@ public class CombinedDomainCategoryPlot extends CategoryPlot
      * @param domainAxis  the shared domain axis (<code>null</code> not
      *                    permitted).
      */
-    public CombinedDomainCategoryPlot(CategoryAxis domainAxis) {
-        super(null, domainAxis, null, null);
+    public CombinedDomainCategoryPlot(Context ctx, CategoryAxis domainAxis) {
+        super(ctx);
+        initialize(null, domainAxis, null, null);
         this.subplots = new java.util.ArrayList();
         this.gap = 5.0;
     }

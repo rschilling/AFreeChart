@@ -81,6 +81,7 @@ import org.afree.ui.RectangleInsets;
 import org.afree.util.Rotation;
 import org.afree.util.UnitType;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -132,19 +133,12 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
     private double sectionDepth;
 
     /**
-     * Creates a new plot with a <code>null</code> dataset.
-     */
-    public RingPlot() {
-        this(null);
-    }
-
-    /**
      * Creates a new plot for the specified dataset.
      *
      * @param dataset  the dataset (<code>null</code> permitted).
      */
-    public RingPlot(PieDataset dataset) {
-        super(dataset);
+    public RingPlot(Context ctx, PieDataset dataset) {
+        super(ctx, dataset);
         this.separatorsVisible = true;
 //        this.separatorStroke = new BasicStroke(0.5f);
         this.separatorStroke = 0.5f;

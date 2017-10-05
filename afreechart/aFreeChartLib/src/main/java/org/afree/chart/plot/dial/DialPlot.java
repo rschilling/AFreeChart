@@ -74,6 +74,8 @@ import org.afree.chart.plot.Plot;
 import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.chart.plot.PlotState;
 import org.afree.graphics.geom.RectShape;
+
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.Region.Op;
@@ -155,17 +157,11 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
 
     /**
      * Creates a new instance of <code>DialPlot</code>.
-     */
-    public DialPlot() {
-        this(null);
-    }
-
-    /**
-     * Creates a new instance of <code>DialPlot</code>.
      *
      * @param dataset  the dataset (<code>null</code> permitted).
      */
-    public DialPlot(ValueDataset dataset) {
+    public DialPlot(Context ctx, ValueDataset dataset) {
+        super(ctx);
         this.background = null;
         this.cap = null;
         this.dialFrame = new ArcDialFrame();
@@ -183,35 +179,6 @@ public class DialPlot extends Plot implements DialLayerChangeListener {
         this.viewH = 1.0;
     }
 
-    /**
-     * Returns the background.
-     *
-     * @return The background (possibly <code>null</code>).
-     *
-     * @see #setBackground(DialLayer)
-     */
-    public DialLayer getBackground() {
-        return this.background;
-    }
-
-    /**
-     * Sets the background layer and sends a {@link PlotChangeEvent} to all
-     * registered listeners.
-     *
-     * @param background  the background layer (<code>null</code> permitted).
-     *
-     * @see #getBackground()
-     */
-    public void setBackground(DialLayer background) {
-        if (this.background != null) {
-            this.background.removeChangeListener(this);
-        }
-        this.background = background;
-        if (background != null) {
-            background.addChangeListener(this);
-        }
-        fireChangeEvent();
-    }
 
     /**
      * Returns the cap.

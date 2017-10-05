@@ -128,6 +128,8 @@ import org.afree.chart.event.PlotChangeEvent;
 import org.afree.chart.event.PlotChangeListener;
 import org.afree.chart.renderer.xy.XYItemRenderer;
 import org.afree.graphics.geom.RectShape;
+
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 
@@ -150,21 +152,16 @@ public class CombinedRangeXYPlot extends XYPlot
     /** Temporary storage for the subplot areas. */
     private transient RectShape[] subplotAreas;
 
-    /**
-     * Default constructor.
-     */
-    public CombinedRangeXYPlot() {
-        this(new NumberAxis());
-    }
 
     /**
      * Creates a new plot.
      *
      * @param rangeAxis  the shared axis.
      */
-    public CombinedRangeXYPlot(ValueAxis rangeAxis) {
+    public CombinedRangeXYPlot(Context ctx, ValueAxis rangeAxis) {
 
-        super(null, // no data in the parent plot
+        super(ctx);
+        initialize(null, // no data in the parent plot
               null,
               rangeAxis,
               null);

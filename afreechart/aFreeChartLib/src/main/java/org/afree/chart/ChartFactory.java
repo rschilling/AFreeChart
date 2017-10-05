@@ -291,7 +291,8 @@ public abstract class ChartFactory {
             renderer.setBaseNegativeItemLabelPosition(position2);
         }
 
-        CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
+        CategoryPlot plot = new CategoryPlot(ctx);
+        plot.initialize(dataset, categoryAxis, valueAxis,
                 renderer);
         plot.setOrientation(orientation);
         AFreeChart chart = new AFreeChart(ctx, title,
@@ -354,7 +355,8 @@ public abstract class ChartFactory {
             renderer.setBaseNegativeItemLabelPosition(position2);
         }
 
-        SlidingCategoryPlot plot = new SlidingCategoryPlot(dataset, categoryAxis, valueAxis, renderer);
+        SlidingCategoryPlot plot = new SlidingCategoryPlot(ctx);
+        plot.initialize(dataset, categoryAxis, valueAxis, renderer);
         plot.setOrientation(orientation);
         AFreeChart chart = new AFreeChart(ctx, title, plot, legend);
         return chart;
@@ -407,7 +409,8 @@ public abstract class ChartFactory {
         }
         */
 
-        CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
+        CategoryPlot plot = new CategoryPlot(ctx);
+        plot.initialize(dataset, categoryAxis, valueAxis,
                 renderer);
         plot.setOrientation(orientation);
         if (orientation == PlotOrientation.HORIZONTAL) {
@@ -445,7 +448,7 @@ public abstract class ChartFactory {
                                             boolean tooltips,
                                             boolean urls) {
 
-        PiePlot plot = new PiePlot(dataset);
+        PiePlot plot = new PiePlot(ctx, dataset);
         plot.setLabelGenerator(new StandardPieSectionLabelGenerator());
         plot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
       
@@ -491,7 +494,8 @@ public abstract class ChartFactory {
 
         LineAndShapeRenderer renderer = new LineAndShapeRenderer(true, false);
       
-        CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
+        CategoryPlot plot = new CategoryPlot(ctx);
+        plot.initialize(dataset, categoryAxis, valueAxis,
                 renderer);
         plot.setOrientation(orientation);
         AFreeChart chart = new AFreeChart(ctx, title,
@@ -538,7 +542,8 @@ public abstract class ChartFactory {
         XYItemRenderer renderer = new XYLineAndShapeRenderer(true, false);
         
         // Generate plot object.
-        XYPlot plot = new XYPlot(dataset, xAxis, yAxis, renderer);
+        XYPlot plot = new XYPlot(ctx);
+        plot.initialize(dataset, xAxis, yAxis, renderer);
         plot.setOrientation(orientation);
       
         // Generate AFreeChart object.
@@ -578,7 +583,8 @@ public abstract class ChartFactory {
         //renderer.setBaseToolTipGenerator(new HighLowItemLabelGenerator());
         
         // Generate plot object.
-        XYPlot plot = new XYPlot(dataset, timeAxis, valueAxis, renderer);
+        XYPlot plot = new XYPlot(ctx);
+        plot.initialize(dataset, timeAxis, valueAxis, renderer);
         
         // Generate AFreeChart object.
         AFreeChart chart = new AFreeChart(ctx, title,
@@ -639,7 +645,8 @@ public abstract class ChartFactory {
         }
          */
         
-        CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
+        CategoryPlot plot = new CategoryPlot(ctx);
+        plot.initialize(dataset, categoryAxis, valueAxis,
                 renderer);
         plot.setOrientation(orientation);
         AFreeChart chart = new AFreeChart(ctx, title,
@@ -670,7 +677,7 @@ public abstract class ChartFactory {
                                              boolean tooltips,
                                              boolean urls) {
 
-        RingPlot plot = new RingPlot(dataset);
+        RingPlot plot = new RingPlot(ctx, dataset);
         plot.setLabelGenerator(new StandardPieSectionLabelGenerator());
         plot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
         /*
@@ -749,7 +756,8 @@ public abstract class ChartFactory {
 //            renderer.setURLGenerator(new StandardXYURLGenerator());
 //        }
 
-        XYPlot plot = new XYPlot(dataset, domainAxis, valueAxis, renderer);
+        XYPlot plot = new XYPlot(ctx);
+        plot.initialize(dataset, domainAxis, valueAxis, renderer);
         plot.setOrientation(orientation);
 
         AFreeChart chart = new AFreeChart(ctx, title,
@@ -793,7 +801,8 @@ public abstract class ChartFactory {
         timeAxis.setUpperMargin(0.02);
         NumberAxis valueAxis = new NumberAxis(valueAxisLabel);
         valueAxis.setAutoRangeIncludesZero(false);  // override default
-        XYPlot plot = new XYPlot(dataset, timeAxis, valueAxis, null);
+        XYPlot plot = new XYPlot(ctx);
+        plot.initialize(dataset, timeAxis, valueAxis, null);
 
 //        XYToolTipGenerator toolTipGenerator = null;
 //        if (tooltips) {
@@ -845,7 +854,9 @@ public abstract class ChartFactory {
     
         ValueAxis timeAxis = new DateAxis(timeAxisLabel);
         NumberAxis valueAxis = new NumberAxis(valueAxisLabel);
-        XYPlot plot = new XYPlot(dataset, timeAxis, valueAxis, null);
+        XYPlot plot = new XYPlot(ctx);
+        plot.initialize(dataset, timeAxis, valueAxis, null);
+
         plot.setRenderer(new CandlestickRenderer());
         AFreeChart chart = new AFreeChart(ctx, title,
                 plot, legend);
@@ -885,7 +896,8 @@ public abstract class ChartFactory {
             NumberAxis yAxis = new NumberAxis(yAxisLabel);
             yAxis.setAutoRangeIncludesZero(false);
     
-            XYPlot plot = new XYPlot(dataset, xAxis, yAxis, null);
+            XYPlot plot = new XYPlot(ctx);
+            plot.initialize(dataset, xAxis, yAxis, null);
     
     //        XYToolTipGenerator toolTipGenerator = null;
     //        if (tooltips) {

@@ -181,6 +181,7 @@ import org.afree.ui.RectangleEdge;
 import org.afree.ui.RectangleInsets;
 import org.afree.util.ObjectUtilities;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -189,13 +190,16 @@ import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.AttributeSet;
+import android.view.SurfaceView;
 
 /**
  * The base class for all plots in AFreeChart. The {@link AFreeChart} class
  * delegates the drawing of axes and data to the plot. This base class provides
  * facilities common to most plot types.
  */
-public abstract class Plot implements AxisChangeListener, LegendItemSource, Cloneable, Serializable,DatasetChangeListener, MarkerChangeListener {
+public abstract class Plot extends SurfaceView implements AxisChangeListener, LegendItemSource,
+        Serializable, DatasetChangeListener, MarkerChangeListener {
 
     /** For serialization. */
     private static final long serialVersionUID = -8831571430103671324L;
@@ -298,10 +302,25 @@ public abstract class Plot implements AxisChangeListener, LegendItemSource, Clon
 
     private BitmapDrawable backgroundImage;
 
+    public Plot(Context context) {
+        super(context);
+        initialize();
+    }
+
+    public Plot(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initialize();
+    }
+
+    public Plot(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        initialize();
+    }
+
     /**
      * Creates a new plot.
      */
-    protected Plot() {
+    private void initialize(){
 
         this.parent = null;
         this.insets = DEFAULT_INSETS;
@@ -454,7 +473,7 @@ public abstract class Plot implements AxisChangeListener, LegendItemSource, Clon
      * @see #setParent(Plot)
      * @see #getRootPlot()
      */
-    public Plot getParent() {
+    public Plot getParentPlot() {
         return this.parent;
     }
 
@@ -480,11 +499,11 @@ public abstract class Plot implements AxisChangeListener, LegendItemSource, Clon
      */
     public Plot getRootPlot() {
 
-        Plot p = getParent();
-        if (p == null) {
+
+        if (parent == null) {
             return this;
         } else {
-            return p.getRootPlot();
+            return parent.getRootPlot();
         }
 
     }
@@ -629,9 +648,9 @@ public abstract class Plot implements AxisChangeListener, LegendItemSource, Clon
      */
     public DrawingSupplier getDrawingSupplier() {
         DrawingSupplier result = null;
-        Plot p = getParent();
-        if (p != null) {
-            result = p.getDrawingSupplier();
+
+        if (parent != null) {
+            result = parent.getDrawingSupplier();
         } else {
             result = this.drawingSupplier;
         }
@@ -972,10 +991,7 @@ public abstract class Plot implements AxisChangeListener, LegendItemSource, Clon
      *
      * @param canvas  the graphics device.
      * @param area  the area.
-     *
-     * @see #getBackgroundImage()
-     * @see #getBackgroundImageAlignment()
-     * @see #getBackgroundImageAlpha()
+
      */
     public void drawBackgroundImage(Canvas canvas, RectShape area) {
         if (this.backgroundImage != null) {
@@ -1322,75 +1338,12 @@ public abstract class Plot implements AxisChangeListener, LegendItemSource, Clon
      * {@link PlotChangeEvent} to all registered listeners.
      *
      * @param image  the image (<code>null</code> permitted).
-     *
-     * @see #getBackgroundImage()
      */
     public void setBackgroundImage(BitmapDrawable image) {
         this.backgroundImage = image;
         fireChangeEvent();
     }
-    
-//    /**
-//     * Sets the alignment for the background image and sends a
-//     * {@link PlotChangeEvent} to all registered listeners.  Alignment options
-//     * are defined by the {@link org.jfree.ui.Align} class in the JCommon
-//     * class library.
-//     *
-//     * @param alignment  the alignment.
-//     *
-//     * @see #getBackgroundImageAlignment()
-//     */
-//    public void setBackgroundImageAlignment(int alignment) {
-//        if (this.backgroundImageAlignment != alignment) {
-//            this.backgroundImageAlignment = alignment;
-//            fireChangeEvent();
-//        }
-//    }
-    
-//    /**
-//     * Sets the alpha transparency used when drawing the background image.
-//     *
-//     * @param alpha  the alpha transparency (in the range 0.0f to 1.0f, where
-//     *     0.0f is fully transparent, and 1.0f is fully opaque).
-//     *
-//     * @throws IllegalArgumentException if <code>alpha</code> is not within
-//     *     the specified range.
-//     *
-//     * @see #getBackgroundImageAlpha()
-//     */
-//    public void setBackgroundImageAlpha(float alpha) {
-//        if (alpha < 0.0f || alpha > 1.0f)
-//            throw new IllegalArgumentException(
-//                    "The 'alpha' value must be in the range 0.0f to 1.0f.");
-//        if (this.backgroundImageAlpha != alpha) {
-//            this.backgroundImageAlpha = alpha;
-//            fireChangeEvent();
-//        }
-//    }
-    
-    /**
-     * Creates a clone of the plot.
-     *
-     * @return A clone.
-     *
-     * @throws CloneNotSupportedException if some component of the plot does not
-     *         support cloning.
-     */
-    public Object clone() throws CloneNotSupportedException {
 
-        Plot clone = (Plot) super.clone();
-        // private Plot parent <-- don't clone the parent plot, but take care
-        // childs in combined plots instead
-        if (this.datasetGroup != null) {
-            clone.datasetGroup
-                = (DatasetGroup) ObjectUtilities.clone(this.datasetGroup);
-        }
-        clone.drawingSupplier
-            = (DrawingSupplier) ObjectUtilities.clone(this.drawingSupplier);
-        clone.listenerList = new CopyOnWriteArrayList<PlotChangeListener>();
-        return clone;
-
-    }
 
     /**
      * Sends a {@link PlotChangeEvent} to all registered listeners.
